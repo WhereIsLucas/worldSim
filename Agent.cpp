@@ -4,6 +4,7 @@
 
 #include <cstdlib>
 #include "Agent.h"
+#include "World.h"
 
 Agent::Agent(int x, int y) : x(x), y(y) {
     Agent::x = x;
@@ -23,21 +24,37 @@ float Agent::getCollectedFood() const {
     return collectedFood;
 }
 
-void Agent::stepMove() {
-    //TODO check world limits
+void Agent::stepMove(World world1) {
     int direction = rand() % 4;
     switch (direction) {
         case 0:
-            Agent::moveUp();
+            if(Agent::getY() < world1.getY())
+            {
+                Agent::moveUp();
+            }else{
+                Agent::moveDown();
+            }
             break;
         case 1:
-            Agent::moveDown();
+            if(Agent::getY() > 0){
+                Agent::moveDown();
+            }else{
+                Agent::moveUp();
+            }
             break;
         case 2:
-            Agent::moveRight();
+            if(Agent::getX() < world1.getX()){
+                Agent::moveRight();
+            }else{
+                Agent::moveLeft();
+            }
             break;
         case 3:
-            Agent::moveLeft();
+            if(Agent::getX() > 0){
+                Agent::moveLeft();
+            }else{
+                Agent::moveRight();
+            }
             break;
     }
 }

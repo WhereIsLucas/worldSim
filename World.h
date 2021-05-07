@@ -5,6 +5,7 @@
 #ifndef CHAOSFRACTACLE_WORLD_H
 #define CHAOSFRACTACLE_WORLD_H
 
+class Agent;
 
 #include <vector>
 #include "Agent.h"
@@ -12,14 +13,30 @@
 class World {
 public:
     World(int x, int y);
+
     void addAgent(Agent agent);
+
     unsigned long getAgentsCount();
-    Agent * getAgent(int index);
+
+    Agent *getAgent(int index);
+
+    void prepareFood(int foodQuantity);
 
 private:
     int x;
+public:
+    int getX() const;
+
+    void clearFood();
+
+    int getY() const;
+
+private:
     int y;
     std::vector<Agent> agents;
+    std::vector<std::vector <double>> food;
+public:
+    const std::vector<std::vector<double>> &getFood() const;
 };
 
 

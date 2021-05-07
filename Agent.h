@@ -5,14 +5,13 @@
 #ifndef CHAOSFRACTACLE_AGENT_H
 #define CHAOSFRACTACLE_AGENT_H
 
+class World;
+#include "World.h"
 
 class Agent {
 public:
     Agent(int x, int y);
 
-    void stepMove();
-
-private:
     int x;
 public:
     int getX() const;
@@ -20,6 +19,7 @@ public:
     int getY() const;
 
     float getCollectedFood() const;
+    void stepMove(World world1);
 
 private:
     int y;
@@ -32,6 +32,7 @@ private:
     void moveRight();
 
     void moveLeft();
+
 };
 
 
