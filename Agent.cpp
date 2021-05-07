@@ -74,3 +74,7 @@ void Agent::moveRight() {
 void Agent::moveLeft() {
     Agent::x = (Agent::getX() - 1);
 }
+
+void Agent::setCollectedFood(float collectedFood) {
+    Agent::collectedFood = collectedFood;
+}

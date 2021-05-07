@@ -12,6 +12,14 @@ void AgentsPrinter::print(Agent *agent, int frameNumber) const {
     file.close();
 }
 
+void AgentsPrinter::printNull(int frameNumber) const {
+    std::string fileName = AgentsPrinter::getPath()+"agent" + std::to_string(frameNumber) + ".txt";
+    std::ofstream file;
+    file.open(fileName.c_str(), std::ios::app);
+    file.precision(10);
+    file.close();
+}
+
 const std::string &AgentsPrinter::getPath() const {
     return path;
 }

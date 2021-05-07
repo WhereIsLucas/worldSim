@@ -50,5 +50,17 @@ const std::vector<std::vector<double>> &World::getFood() const {
     return food;
 }
 
+void World::removeAgent(int index) {
+    World::agents.erase(World::agents.begin() + index);
+}
+
+void World::setFoodAtPosition(int xPosition, int yPosition, double foodQty) {
+    World::food[xPosition][yPosition] = foodQty;
+}
+
+double World::getFoodAtPosition(int xPosition, int yPosition) {
+    return World::food[xPosition][yPosition];
+}
+
 
 

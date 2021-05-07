@@ -26,6 +26,8 @@ for i in range(0, totalFrames):
                                  names=['x', 'y']))
 showingFrame = 0
 agentScatGraph = plt.scatter(agentsData[showingFrame]["x"], agentsData[showingFrame]['y'], alpha=0.5, s=20, c='red')
+#red are agents
+#blue is food
 
 path2 = "./cmake-build-debug/results/food/"
 for i in range(0, totalFrames):

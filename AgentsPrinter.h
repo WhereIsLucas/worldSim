@@ -19,6 +19,8 @@ public:
 
     void print(Agent *agent, int day) const;
     void clearPrint(int day);
+
+    void printNull(int frameNumber) const;
 };
 
 

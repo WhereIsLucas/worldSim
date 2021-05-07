@@ -13,7 +13,9 @@ class Agent;
 class World {
 public:
     World(int x, int y);
-
+    void removeAgent(int index);
+    void setFoodAtPosition(int xPosition, int y, double  foodQty);
+    double getFoodAtPosition(int xPosition, int y);
     void addAgent(Agent agent);
 
     unsigned long getAgentsCount();
@@ -37,6 +39,7 @@ private:
     std::vector<std::vector <double>> food;
 public:
     const std::vector<std::vector<double>> &getFood() const;
+
 };
 
 
