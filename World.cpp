@@ -41,7 +41,7 @@ void World::prepareFood(int foodQuantity) {
 void World::clearFood(){
     for (int i = 0; i < World::x; ++i) {
         for (int j = 0; j < World::y; ++j) {
-            World::food[i][j] = 0;
+            World::food[i][j] = 0.;
         }
     }
 }

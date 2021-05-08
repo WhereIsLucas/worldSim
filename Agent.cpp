@@ -6,9 +6,9 @@
 #include "Agent.h"
 #include "World.h"
 
-Agent::Agent(int x, int y) : x(x), y(y) {
-    Agent::x = x;
-    Agent::y = y;
+Agent::Agent(int positionX, int positionY) : x(positionX), y(positionY) {
+    Agent::x = positionX;
+    Agent::y = positionY;
     Agent::collectedFood = 0.0;
 }
 
@@ -28,7 +28,7 @@ void Agent::stepMove(World world1) {
     int direction = rand() % 4;
     switch (direction) {
         case 0:
-            if(Agent::getY() < world1.getY())
+            if(Agent::getY() < world1.getY()-1)
             {
                 Agent::moveUp();
             }else{
@@ -43,7 +43,7 @@ void Agent::stepMove(World world1) {
             }
             break;
         case 2:
-            if(Agent::getX() < world1.getX()){
+            if(Agent::getX() < world1.getX()-1){
                 Agent::moveRight();
             }else{
                 Agent::moveLeft();

@@ -25,7 +25,7 @@ for i in range(0, totalFrames):
                                  dtype=types,
                                  names=['x', 'y']))
 showingFrame = 0
-agentScatGraph = plt.scatter(agentsData[showingFrame]["x"], agentsData[showingFrame]['y'], alpha=0.5, s=20, c='red')
+agentScatGraph = plt.scatter(agentsData[showingFrame]["x"], agentsData[showingFrame]['y'], alpha=0.5, s=20, c='red', label='Agent')
 #red are agents
 #blue is food
 
@@ -37,16 +37,17 @@ for i in range(0, totalFrames):
                                  dtype=types,
                                  names=['x', 'y']))
 showingFrame = 0
-foodScatGraph = plt.scatter(foodData[showingFrame]["x"], foodData[showingFrame]['y'], alpha=0.5, s=10, c='blue')
+foodScatGraph = plt.scatter(foodData[showingFrame]["x"], foodData[showingFrame]['y'],marker='*', alpha=0.5, s=20, c='blue',label='Food')
 
 plt.title('Scatter plot test')
+plt.legend()
 # plt.gca().set_aspect('equal', adjustable='box')
 plt.axis("equal")
 
 plt.xlim(-5, 105)
 plt.ylim(-5, 105)
-plt.xlabel('x')
-plt.ylabel('y')
+# plt.xlabel('x')
+# plt.ylabel('y')
 
 plt.savefig('exports/test.png')
 

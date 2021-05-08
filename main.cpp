@@ -9,7 +9,7 @@ int main() {
 
     int maxDays = 10;
     int startingAgents = 25;
-    int foodPerDay = 10;
+    int foodPerDay = 25;
     int stepPerDay = 60;
     int worldXWidth = 100;
     int worldYWidth = 100;
