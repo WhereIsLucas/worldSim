@@ -2,15 +2,15 @@
 // Created by lucas on 07.05.21.
 //
 
-#ifndef CHAOSFRACTACLE_AGENT_H
-#define CHAOSFRACTACLE_AGENT_H
+#ifndef CHAOSFRACTACLE_CREATURE_H
+#define CHAOSFRACTACLE_CREATURE_H
 
 class World;
 #include "World.h"
 
-class Agent {
+class Creature {
 public:
-    Agent(int x, int y);
+    Creature(int x, int y);
 
     int x;
 public:
@@ -40,4 +40,4 @@ private:
 };
 
 
-#endif //CHAOSFRACTACLE_AGENT_H
+#endif //CHAOSFRACTACLE_CREATURE_H

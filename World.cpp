@@ -12,16 +12,16 @@ World::World(int x, int y) : x(x), y(y) {
     World::food = food2;
 }
 
-void World::addAgent(Agent agent) {
-    World::agents.push_back(agent);
+void World::addCreature(Creature creature) {
+    World::creatures.push_back(creature);
 }
 
-unsigned long World::getAgentsCount() {
-    return World::agents.size();
+unsigned long World::getCreaturesCount() {
+    return World::creatures.size();
 }
 
-Agent * World::getAgent(int index) {
-    return &World::agents[index];
+Creature * World::getCreature(int index) {
+    return &World::creatures[index];
 }
 
 int World::getX() const {
@@ -50,8 +50,8 @@ const std::vector<std::vector<double>> &World::getFood() const {
     return food;
 }
 
-void World::removeAgent(int index) {
-    World::agents.erase(World::agents.begin() + index);
+void World::removeCreature(int index) {
+    World::creatures.erase(World::creatures.begin() + index);
 }
 
 void World::setFoodAtPosition(int xPosition, int yPosition, double foodQty) {

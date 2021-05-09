@@ -1,6 +1,6 @@
 #include <iostream>
 #include "World.h"
-#include "AgentsPrinter.h"
+#include "CreaturesPrinter.h"
 #include "FoodPrinter.h"
 #include <ctime>
 
@@ -8,59 +8,64 @@ int main() {
     srand((unsigned) time(0));
 
     int maxDays = 10;
-    int startingAgents = 25;
-    int foodPerDay = 25;
-    int stepPerDay = 60;
+    int startingCreatures = 25;
+    int foodPerDay = 50;
+    int stepPerDay = 100;
     int worldXWidth = 100;
     int worldYWidth = 100;
     auto world = new World(worldXWidth, worldYWidth);
-    auto agentsPrinter = new AgentsPrinter("results/agents/");
+    //We prepare the printers
+    auto creaturesPrinter = new CreaturesPrinter("results/creatures/");
     auto foodPrinter = new FoodPrinter("results/food/");
+    //We clear the old files
     for (int l = 0; l <= maxDays; l++) {
-        agentsPrinter->clearPrint(l);
+        creaturesPrinter->clearPrint(l);
     }
     for (int l = 0; l <= maxDays; l++) {
         foodPrinter->clearPrint(l);
     }
-    for (int i = 0; i < startingAgents; ++i) {
-        auto agent = new Agent((rand() % worldXWidth), (rand() % worldYWidth));
-        world->addAgent(*agent);
+    //We start the world and place creatures randomly
+    for (int i = 0; i < startingCreatures; ++i) {
+        auto creature = new Creature((rand() % world->getX()), (rand() % world->getY()));
+        world->addCreature(*creature);
     }
+    //Days loop
     for (int day = 0; day < maxDays; ++day) {
         world->clearFood();
-        for (int i = 0; i < world->getAgentsCount(); ++i) {
-            world->getAgent(i)->setCollectedFood(0);
-        }
         world->prepareFood(foodPerDay);
+        for (int i = 0; i < world->getCreaturesCount(); ++i) {
+            world->getCreature(i)->setCollectedFood(0);
+        }
+        //Set
         for (int j = 0; j < stepPerDay; ++j) {
-            for (int k = 0; k < world->getAgentsCount(); ++k) {
-                world->getAgent(k)->stepMove(*world);
+            for (int k = 0; k < world->getCreaturesCount(); ++k) {
+                world->getCreature(k)->stepMove(*world);
                 //EAT
-                if (world->getFoodAtPosition(world->getAgent(k)->getX(), world->getAgent(k)->getY()) > 0) {
-                    world->setFoodAtPosition(world->getAgent(k)->getX(), world->getAgent(k)->getY(),
-                                             world->getFoodAtPosition(world->getAgent(k)->getX(),
-                                                                      world->getAgent(k)->getY()) - 1);
-                    world->getAgent(k)->setCollectedFood(1);
+                if (world->getFoodAtPosition(world->getCreature(k)->getX(), world->getCreature(k)->getY()) > 0) {
+                    world->setFoodAtPosition(world->getCreature(k)->getX(), world->getCreature(k)->getY(),
+                                             world->getFoodAtPosition(world->getCreature(k)->getX(),
+                                                                      world->getCreature(k)->getY()) - 1);
+                    world->getCreature(k)->setCollectedFood(1);
                 }
             }
-            if (world->getAgentsCount()) {
-                for (int i = 0; i < world->getAgentsCount(); ++i) {
-                    agentsPrinter->print(world->getAgent(i), day * stepPerDay + j);
+            if (world->getCreaturesCount()) {
+                for (int i = 0; i < world->getCreaturesCount(); ++i) {
+                    creaturesPrinter->print(world->getCreature(i), day * stepPerDay + j);
                 }
             } else {
-                agentsPrinter->printNull(day * stepPerDay + j);
+                creaturesPrinter->printNull(day * stepPerDay + j);
             }
 
             foodPrinter->print(world, day * stepPerDay + j);
         }
-        for (int i = 0; i < world->getAgentsCount(); ++i) {
-            if (world->getAgent(i)->getCollectedFood() > 0) {
+        for (int i = 0; i < world->getCreaturesCount(); ++i) {
+            if (world->getCreature(i)->getCollectedFood() > 0) {
 
             } else {
-                world->removeAgent(i);
+                world->removeCreature(i);
             }
         }
-        std::cout << "Agents : " << world->getAgentsCount() << std::endl;
+        std::cout << "Creatures : " << world->getCreaturesCount() << std::endl;
     }
     return 0;
 }
