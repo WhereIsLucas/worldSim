@@ -62,5 +62,13 @@ double World::getFoodAtPosition(int xPosition, int yPosition) {
     return World::food[xPosition][yPosition];
 }
 
+void World::setX(int x) {
+    World::x = x;
+}
+
+void World::setY(int y) {
+    World::y = y;
+}
+
 
 

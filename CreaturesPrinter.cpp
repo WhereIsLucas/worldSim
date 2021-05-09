@@ -16,7 +16,6 @@ void CreaturesPrinter::printNull(int frameNumber) const {
     std::string fileName = CreaturesPrinter::getPath()+"creature" + std::to_string(frameNumber) + ".txt";
     std::ofstream file;
     file.open(fileName.c_str(), std::ios::app);
-    file.precision(10);
     file.close();
 }
 

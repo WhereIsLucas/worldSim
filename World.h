@@ -26,17 +26,22 @@ public:
 
 private:
     int x;
+    int y;
+
+private:
+    std::vector<Creature> creatures;
+    std::vector<std::vector <double>> food;
+
 public:
     int getX() const;
+    int getY() const;
+    void setX(int x);
+    void setY(int y);
 
     void clearFood();
 
-    int getY() const;
 
 private:
-    int y;
-    std::vector<Creature> creatures;
-    std::vector<std::vector <double>> food;
 public:
     const std::vector<std::vector<double>> &getFood() const;
 

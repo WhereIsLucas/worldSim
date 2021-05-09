@@ -75,6 +75,6 @@ void Creature::moveLeft() {
     Creature::x = (Creature::getX() - 1);
 }
 
-void Creature::setCollectedFood(float collectedFood) {
-    Creature::collectedFood = collectedFood;
+void Creature::setCollectedFood(float collectedFoodArg) {
+    Creature::collectedFood = collectedFoodArg;
 }

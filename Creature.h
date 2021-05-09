@@ -25,7 +25,7 @@ private:
     int y;
     float collectedFood;
 public:
-    void setCollectedFood(float collectedFood);
+    void setCollectedFood(float collectedFoodArg);
 
 private:
 

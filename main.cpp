@@ -58,6 +58,7 @@ int main() {
 
             foodPrinter->print(world, day * stepPerDay + j);
         }
+
         for (int i = 0; i < world->getCreaturesCount(); ++i) {
             if (world->getCreature(i)->getCollectedFood() > 0) {
 
