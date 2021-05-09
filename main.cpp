@@ -55,7 +55,6 @@ int main() {
             } else {
                 creaturesPrinter->printNull(day * stepPerDay + j);
             }
-
             foodPrinter->print(world, day * stepPerDay + j);
         }
 
