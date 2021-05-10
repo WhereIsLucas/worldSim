@@ -8,6 +8,7 @@
 
 ## Coding alternatives
 * Allow change in direction every few steps to cover more ground (see Levy flight --> good for continuous method)
+    * add an omega parameter 'direction' with a noise
 * Change rand() by specific distribution drawing if needed
 
 ## A few ideas :

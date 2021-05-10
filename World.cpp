@@ -34,33 +34,24 @@ double World::getY() const {
 
 void World::prepareFood(int foodQuantity) {
     for (int i = 0; i < foodQuantity; ++i) {
-//        World::food[rand() % World::x][rand() % World::y]= World::food[rand() % World::x][rand() % World::y] + 1;
+        auto position = Vector2((((float) rand()/RAND_MAX) * World::getX()), ((float) rand()/RAND_MAX) * World::getY());
+        auto foodItem = new FoodItem(position);
+        World::addFoodItem(*foodItem);
     }
 }
 
 void World::clearFood(){
-    for (int i = 0; i < World::x; ++i) {
-        for (int j = 0; j < World::y; ++j) {
-//            World::food[i][j] = 0.;
-        }
-    }
+    World::foodItems.clear();
 }
 
-const std::vector<std::vector<double>> &World::getFood() const {
-//    return food;
+const std::vector<FoodItem> &World::getFoodItems() const {
+    return foodItems;
 }
 
 void World::removeCreature(int index) {
     World::creatures.erase(World::creatures.begin() + index);
 }
 
-void World::setFoodAtPosition(double xPosition, double yPosition, double foodQty) {
-//    World::food[xPosition][yPosition] = foodQty;
-}
-
-double World::getFoodAtPosition(double xPosition, double yPosition) {
-//    return World::food[xPosition][yPosition];
-}
 
 void World::setX(double x) {
     World::x = x;
@@ -68,6 +59,10 @@ void World::setX(double x) {
 
 void World::setY(double y) {
     World::y = y;
+}
+
+void World::addFoodItem(FoodItem foodItem) {
+    World::foodItems.push_back(foodItem);
 }
 
 

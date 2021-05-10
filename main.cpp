@@ -1,7 +1,7 @@
 #include <iostream>
 #include "World.h"
-#include "CreaturesPrinter.h"
-#include "FoodPrinter.h"
+#include "printers/CreaturesPrinter.h"
+#include "printers/FoodPrinter.h"
 #include <ctime>
 
 int main() {
@@ -14,20 +14,20 @@ int main() {
     double worldXWidth = 100;
     double worldYWidth = 100;
     auto world = new World(worldXWidth, worldYWidth);
-    exit;
     //We prepare the printers
     auto creaturesPrinter = new CreaturesPrinter("results/creatures/");
     auto foodPrinter = new FoodPrinter("results/food/");
     //We clear the old files
-    for (int l = 0; l <= maxDays; l++) {
+    for (int l = 0; l <= maxDays * stepPerDay; l++) {
         creaturesPrinter->clearPrint(l);
     }
-    for (int l = 0; l <= maxDays; l++) {
+    for (int l = 0; l <= maxDays * stepPerDay; l++) {
         foodPrinter->clearPrint(l);
     }
     //We start the world and place creatures randomly
     for (int i = 0; i < startingCreatures; ++i) {
-        auto position = Vector2((rand()/RAND_MAX * world->getX()), (rand()/RAND_MAX * world->getY()));
+        auto position = Vector2((((float) rand() / RAND_MAX) * world->getX()),
+                                ((float) rand() / RAND_MAX) * world->getY());
         auto creature = new Creature(position);
         world->addCreature(*creature);
     }
@@ -38,17 +38,16 @@ int main() {
         for (int i = 0; i < world->getCreaturesCount(); ++i) {
             world->getCreature(i)->setCollectedFood(0);
         }
-        //Set
         for (int j = 0; j < stepPerDay; ++j) {
             for (int k = 0; k < world->getCreaturesCount(); ++k) {
                 world->getCreature(k)->stepMove(*world);
-                //EAT
-//                if (world->getFoodAtPosition(world->getCreature(k)->getPosition(), world->getCreature(k)->getY()) > 0) {
-//                    world->setFoodAtPosition(world->getCreature(k)->getX(), world->getCreature(k)->getY(),
-//                                             world->getFoodAtPosition(world->getCreature(k)->getX(),
-//                                                                      world->getCreature(k)->getY()) - 1);
-//                    world->getCreature(k)->setCollectedFood(1);
-//                }
+//                //EAT
+////                if (world->getFoodAtPosition(world->getCreature(k)->getPosition(), world->getCreature(k)->getY()) > 0) {
+////                    world->setFoodAtPosition(world->getCreature(k)->getX(), world->getCreature(k)->getY(),
+////                                             world->getFoodAtPosition(world->getCreature(k)->getX(),
+////                                                                      world->getCreature(k)->getY()) - 1);
+////                    world->getCreature(k)->setCollectedFood(1);
+////                }
             }
             if (world->getCreaturesCount()) {
                 for (int i = 0; i < world->getCreaturesCount(); ++i) {
@@ -57,16 +56,16 @@ int main() {
             } else {
                 creaturesPrinter->printNull(day * stepPerDay + j);
             }
-//            foodPrinter->print(world, day * stepPerDay + j);
+            foodPrinter->print(world, day * stepPerDay + j);
         }
 
-        for (int i = 0; i < world->getCreaturesCount(); ++i) {
-            if (world->getCreature(i)->getCollectedFood() > 0) {
-
-            } else {
-                world->removeCreature(i);
-            }
-        }
+//        for (int i = 0; i < world->getCreaturesCount(); ++i) {
+//            if (world->getCreature(i)->getCollectedFood() > 0) {
+//
+//            } else {
+//                world->removeCreature(i);
+//            }
+//        }
         std::cout << "Creatures : " << world->getCreaturesCount() << std::endl;
     }
     return 0;

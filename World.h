@@ -9,6 +9,7 @@ class Creature;
 
 #include <vector>
 #include "Creature.h"
+#include "FoodItem.h"
 
 class World {
 public:
@@ -18,9 +19,8 @@ public:
 
     void setFoodAtPosition(double xPosition, double yPosition, double foodQty);
 
-    double getFoodAtPosition(double xPosition, double yPosition);
-
     void addCreature(Creature creature);
+    void addFoodItem(FoodItem foodItem);
 
     unsigned long getCreaturesCount();
 
@@ -37,15 +37,13 @@ public:
     void setY(double y);
 
     void clearFood();
-
-    const std::vector<std::vector<double>> &getFood() const;
-
+    const std::vector<FoodItem> &getFoodItems() const;
 
 private:
     double x;
     double y;
     std::vector<Creature> creatures;
-//    std::vector<std::vector<double>> food;
+    std::vector<FoodItem> foodItems;
 
 };
 

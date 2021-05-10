@@ -5,7 +5,7 @@
 #ifndef CHAOSFRACTACLE_FOODPRINTER_H
 #define CHAOSFRACTACLE_FOODPRINTER_H
 
-#include "World.h"
+#include "../World.h"
 
 class FoodPrinter {
 private:

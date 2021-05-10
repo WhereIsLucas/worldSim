@@ -8,7 +8,7 @@
 class World;
 
 #include "World.h"
-#include "Vector2.h"
+#include "utilities/Vector2.h"
 
 class Creature {
 public:
@@ -16,7 +16,7 @@ public:
 
     float getCollectedFood() const;
 
-    void stepMove(World world1);
+    void stepMove();
 
     const Vector2 &getPosition() const;
 

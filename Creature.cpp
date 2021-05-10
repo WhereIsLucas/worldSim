@@ -5,15 +5,27 @@
 #include <cstdlib>
 #include "Creature.h"
 #include "World.h"
-#include "Vector2.h"
+#include "utilities/Vector2.h"
 
 
 float Creature::getCollectedFood() const {
     return collectedFood;
 }
 
-void Creature::stepMove(World world1) {
-    //TODO
+void Creature::stepMove() {
+    //TODO refactor this shit
+    double maxDisplacement = 2.;
+    double xDirection = -1;
+    double yDirection = -1;
+    if((float) rand() / RAND_MAX > 0.5){
+        xDirection = 1;
+    }
+    if((float) rand() / RAND_MAX > 0.5){
+        yDirection = 1;
+    }
+    Vector2 dVec = Vector2((((float) rand() / RAND_MAX) * maxDisplacement * xDirection),
+            ((float) rand() / RAND_MAX) * maxDisplacement * yDirection);
+    Creature::position = Creature::position + dVec;
 }
 
 
@@ -24,7 +36,7 @@ void Creature::setCollectedFood(float collectedFoodArg) {
 Creature::Creature(Vector2 &position) {
     Creature::position = position;
     Creature::velocity = Vector2(0,0);
-    Creature::collectedFood = 0;
+    Creature::collectedFood = 0.;
 }
 
 const Vector2 &Creature::getPosition() const {

@@ -8,12 +8,9 @@ void FoodPrinter::print(World *world, int frameNumber) const {
     std::ofstream file;
     file.open(fileName.c_str(), std::ios::app);
     file.precision(10);
-    for (int i = 0; i < world->getX(); ++i) {
-        for (int j = 0; j < world->getY(); ++j) {
-            if (world->getFood()[i][j]){
-                file << i << "," << j << std::endl;
-            }
-        }
+    for (int i = 0; i < world->getFoodItems().size(); ++i) {
+        auto foodItem = world->getFoodItems()[i];
+        file << foodItem.getX() << "," << foodItem.getY() << std::endl;
     }
     file.close();
 }
