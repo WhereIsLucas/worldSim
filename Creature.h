@@ -6,37 +6,32 @@
 #define CHAOSFRACTACLE_CREATURE_H
 
 class World;
+
 #include "World.h"
+#include "Vector2.h"
 
 class Creature {
 public:
-    Creature(int x, int y);
-
-    int x;
-public:
-    int getX() const;
-
-    int getY() const;
+    Creature(Vector2 &position);
 
     float getCollectedFood() const;
+
     void stepMove(World world1);
 
+    const Vector2 &getPosition() const;
+
+    const Vector2 &getVelocity() const;
+
 private:
-    int y;
+    Vector2 position;
+    Vector2 velocity;
     float collectedFood;
+
 public:
     void setCollectedFood(float collectedFoodArg);
 
-private:
-
-    void moveUp();
-
-    void moveDown();
-
-    void moveRight();
-
-    void moveLeft();
-
+    double getX();
+    double getY();
 };
 
 

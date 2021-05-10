@@ -12,10 +12,14 @@ class Creature;
 
 class World {
 public:
-    World(int x, int y);
+    World(double x, double y);
+
     void removeCreature(int index);
-    void setFoodAtPosition(int xPosition, int y, double  foodQty);
-    double getFoodAtPosition(int xPosition, int y);
+
+    void setFoodAtPosition(double xPosition, double yPosition, double foodQty);
+
+    double getFoodAtPosition(double xPosition, double yPosition);
+
     void addCreature(Creature creature);
 
     unsigned long getCreaturesCount();
@@ -24,26 +28,24 @@ public:
 
     void prepareFood(int foodQuantity);
 
-private:
-    int x;
-    int y;
+    double getX() const;
 
-private:
-    std::vector<Creature> creatures;
-    std::vector<std::vector <double>> food;
+    double getY() const;
 
-public:
-    int getX() const;
-    int getY() const;
-    void setX(int x);
-    void setY(int y);
+    void setX(double x);
+
+    void setY(double y);
 
     void clearFood();
 
+    const std::vector<std::vector<double>> &getFood() const;
+
 
 private:
-public:
-    const std::vector<std::vector<double>> &getFood() const;
+    double x;
+    double y;
+    std::vector<Creature> creatures;
+//    std::vector<std::vector<double>> food;
 
 };
 
