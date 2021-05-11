@@ -25,7 +25,8 @@ public:
 private:
     Vector2 position;
     Vector2 velocity;
-    float collectedFood;
+    float collectedFood = 0.;
+    float eatingRange = 0.3; //Creatures can eat food within this range
 
 public:
     void setCollectedFood(float collectedFoodArg);

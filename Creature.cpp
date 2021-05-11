@@ -36,7 +36,6 @@ void Creature::setCollectedFood(float collectedFoodArg) {
 Creature::Creature(Vector2 &position) {
     Creature::position = position;
     Creature::velocity = Vector2(0,0);
-    Creature::collectedFood = 0.;
 }
 
 const Vector2 &Creature::getPosition() const {
