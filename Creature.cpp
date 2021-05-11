@@ -12,7 +12,7 @@ float Creature::getCollectedFood() const {
     return collectedFood;
 }
 
-void Creature::stepMove() {
+void Creature::stepMove(World world1) {
     //TODO refactor this shit
     double maxDisplacement = 2.;
     double xDirection = -1;

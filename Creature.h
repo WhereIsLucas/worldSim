@@ -16,7 +16,7 @@ public:
 
     float getCollectedFood() const;
 
-    void stepMove();
+    void stepMove(World world1);
 
     const Vector2 &getPosition() const;
 
