@@ -15,9 +15,14 @@ float Creature::getCollectedFood() const {
 void Creature::stepMove(World world1) {
     //TODO target
     double speed = 1.; // max displacement every increment
-    Creature::angle = Creature::angle + (-45 + ((float) rand()/ RAND_MAX)*90); // in degrees
+    if(fabs(Creature::getX()) >= 50. || fabs(Creature::getY()) >= 50.){
+        Creature::angle = Creature::angle + 180.;
+    }
+    else{
+        Creature::angle = Creature::angle + (-45 + ((float) rand()/ RAND_MAX)*90); // in degrees
+    }
     Vector2 dVec = Vector2(( cos(Creature::angle*M_PI/180.)* speed),
-            ( sin(Creature::angle*M_PI/180.)* speed));
+                           ( sin(Creature::angle*M_PI/180.)* speed));
     Creature::position = Creature::position + dVec;
 }
 

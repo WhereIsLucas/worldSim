@@ -44,8 +44,8 @@ plt.legend()
 # plt.gca().set_aspect('equal', adjustable='box')
 plt.axis("equal")
 
-plt.xlim(-5, 105)
-plt.ylim(-5, 105)
+plt.xlim(-55, 55)
+plt.ylim(-55, 55)
 # plt.xlabel('x')
 # plt.ylabel('y')
 

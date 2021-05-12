@@ -26,8 +26,8 @@ int main() {
     }
     //We start the world and place creatures randomly
     for (int i = 0; i < startingCreatures; ++i) {
-        auto position = Vector2((((float) rand() / RAND_MAX) * world->getX()),
-                                ((float) rand() / RAND_MAX) * world->getY());
+        auto position = Vector2((-50 + ((float) rand() / RAND_MAX) * world->getX()),
+                                (-50 + ((float) rand() / RAND_MAX) * world->getY()));
         auto creature = new Creature(position);
         world->addCreature(*creature);
     }
