@@ -6,25 +6,18 @@
 #include "Creature.h"
 #include "World.h"
 #include "utilities/Vector2.h"
-
+#include <cmath>
 
 float Creature::getCollectedFood() const {
     return collectedFood;
 }
 
 void Creature::stepMove(World world1) {
-    //TODO refactor this shit
-    double maxDisplacement = 2.;
-    double xDirection = -1;
-    double yDirection = -1;
-    if((float) rand() / RAND_MAX > 0.5){
-        xDirection = 1;
-    }
-    if((float) rand() / RAND_MAX > 0.5){
-        yDirection = 1;
-    }
-    Vector2 dVec = Vector2((((float) rand() / RAND_MAX) * maxDisplacement * xDirection),
-            ((float) rand() / RAND_MAX) * maxDisplacement * yDirection);
+    //TODO target
+    double speed = 1.; // max displacement every increment
+    Creature::angle = Creature::angle + (-45 + ((float) rand()/ RAND_MAX)*90); // in degrees
+    Vector2 dVec = Vector2(( cos(Creature::angle*M_PI/180.)* speed),
+            ( sin(Creature::angle*M_PI/180.)* speed));
     Creature::position = Creature::position + dVec;
 }
 
@@ -36,6 +29,7 @@ void Creature::setCollectedFood(float collectedFoodArg) {
 Creature::Creature(Vector2 &position) {
     Creature::position = position;
     Creature::velocity = Vector2(0,0);
+    Creature::angle = 45.;
 }
 
 const Vector2 &Creature::getPosition() const {
