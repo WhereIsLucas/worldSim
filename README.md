@@ -13,6 +13,7 @@
 
 ## A few ideas :
 * terrain differences
+   * Water sources in some areas
 * night/day
 * predator/prey behaviour
 * Multiple layers of food chain (herbivore/carnivore)
