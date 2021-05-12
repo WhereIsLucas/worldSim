@@ -27,23 +27,23 @@ void Creature::stepMove(World &world1) {
             double targetAngle = atan2(-dx, -dy) * (180 / M_PI);
             Creature::angle = (targetAngle + Creature::angle) / 2.;
         }
-    } else {
-        Creature::angle = Creature::angle + noise; // in degrees
     }
     if (fabs(Creature::getX()) >= 50. || fabs(Creature::getY()) >= 50.) {
         if (Creature::getX() >= 50.) {
             Creature::position.setX(50);
-        }
-        if (Creature::getX() <= -50.) {
+        }else if (Creature::getX() <= -50.) {
             Creature::position.setX(-50.);
         }
         if (Creature::getY() >= 50.) {
             Creature::position.setY(50);
-        }
-        if (Creature::getY() <= -50.) {
+        }else if (Creature::getY() <= -50.) {
             Creature::position.setY(-50.);
         }
         Creature::angle = Creature::angle + 180. + noise;
+    }else {
+        if(!Creature::hasTarget){ // Trying to remove the ping-pong against boundaries (but failing)
+            Creature::angle = Creature::angle + noise; // in degrees
+        }
     }
 
     Vector2 dVec = Vector2((cos(Creature::angle * M_PI / 180.) * speed),
