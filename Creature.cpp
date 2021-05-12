@@ -114,4 +114,3 @@ void Creature::searchForFood(const World &world) {
         }
     }
 }
-
