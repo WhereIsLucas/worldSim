@@ -16,24 +16,46 @@ public:
 
     float getCollectedFood() const;
 
-    void stepMove(World world1);
+    void stepMove(World &world1);
 
     const Vector2 &getPosition() const;
+    const Vector2 &getTarget() const;
 
     const Vector2 &getVelocity() const;
 
 private:
     Vector2 position;
     Vector2 velocity;
-    double angle;
+    Vector2 target;
+public:
+    void setTarget(const Vector2 &target);
+
+private:
+    bool hasTarget = false;
+public:
+    bool isHasTarget() const;
+
+    void setHasTarget(bool hasTargetBool);
+
+private:
     float collectedFood = 0.;
+    int linkedCell = -9;
+    int linkedCreature = -9;
+    double angle;
     float eatingRange = 0.3; //Creatures can eat food within this range
+
 
 public:
     void setCollectedFood(float collectedFoodArg);
 
     double getX();
     double getY();
+
+    void setLinkedCell(int i);
+
+    void setLinkedCreature(int creatureIndex);
+
+    void searchForFood(const World& world);
 };
 
 

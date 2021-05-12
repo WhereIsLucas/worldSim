@@ -2,14 +2,15 @@
 #include "World.h"
 #include "printers/CreaturesPrinter.h"
 #include "printers/FoodPrinter.h"
+#include "Cell.h"
 #include <ctime>
 
 int main() {
     srand((unsigned) time(0));
 
     int maxDays = 10;
-    int startingCreatures = 25;
-    int foodPerDay = 50;
+    int startingCreatures = 1;
+    int foodPerDay = 2;
     int stepPerDay = 100;
     double worldXWidth = 100;
     double worldYWidth = 100;
@@ -29,25 +30,95 @@ int main() {
         auto position = Vector2((-50 + ((float) rand() / RAND_MAX) * world->getX()),
                                 (-50 + ((float) rand() / RAND_MAX) * world->getY()));
         auto creature = new Creature(position);
+
         world->addCreature(*creature);
     }
+
+
+
+    //linked cells
+    double cellSize = world->getX() / 5.;
+    int nCellX = (int) ((world->getX()) / cellSize);
+    int nCellY = (int) ((world->getY()) / cellSize);
+    int nCell = nCellX * nCellY;
+    Cell *cells = new Cell[nCell];
+
+    std::cout << "Cells values are initialized" << std::endl;
+    std::cout << "nCellX " << nCellX << std::endl;
+    std::cout << "nCellY " << nCellY << std::endl;
+    std::cout << "nCells " << nCell << std::endl;
+
+    int i;
+    int ix, iy;
+    for (i = 0; i < nCell; i++) {
+        cells[i].initCell(i);
+        iy = i / nCellX;
+        ix = i % nCellX;
+        if (ix > 0) { //if not first on the column
+            cells[i].addNeighbor(ix + (iy * nCellX) - 1);
+        }
+        if (ix < nCellX - 1) { //if not last on the column
+            cells[i].addNeighbor(ix + (iy * nCellX) + 1);
+        }
+        if (iy > 0) { //if not on first line
+            cells[i].addNeighbor(ix + (iy - 1) * nCellX);
+            if (ix > 0) { //if not first on the line
+                cells[i].addNeighbor(ix + (iy - 1) * nCellX - 1);
+            }
+            if (ix < nCellX - 1) { //if not last on the line
+                cells[i].addNeighbor(ix + (iy - 1) * nCellX + 1);
+            }
+        }
+        if (iy < nCellY - 1) { //if not on last line
+            cells[i].addNeighbor(ix + ((iy + 1) * nCellX));
+            if (ix > 0) { //if not first on the line
+                cells[i].addNeighbor(ix + ((iy + 1) * nCellX) - 1);
+            }
+            if (ix < nCellX - 1) { //if not last on the line
+                cells[i].addNeighbor(ix + ((iy + 1) * nCellX) + 1);
+            }
+        }
+    }
+
+    std::cout << "Cells are positioned" << std::endl;
+
     //Days loop
     for (int day = 0; day < maxDays; ++day) {
         world->clearFood();
         world->prepareFood(foodPerDay);
         for (int i = 0; i < world->getCreaturesCount(); ++i) {
             world->getCreature(i)->setCollectedFood(0);
+            world->getCreature(i)->setHasTarget(false);
         }
         for (int j = 0; j < stepPerDay; ++j) {
+
+            // reset linked cells
+            for (i = 0; i < nCell; i++) {
+                cells[i].setHeadOfList(-9);
+            }
+
             for (int k = 0; k < world->getCreaturesCount(); ++k) {
-                world->getCreature(k)->stepMove(*world);
-//                //EAT
-////                if (world->getFoodAtPosition(world->getCreature(k)->getPosition(), world->getCreature(k)->getY()) > 0) {
-////                    world->setFoodAtPosition(world->getCreature(k)->getX(), world->getCreature(k)->getY(),
-////                                             world->getFoodAtPosition(world->getCreature(k)->getX(),
-////                                                                      world->getCreature(k)->getY()) - 1);
-////                    world->getCreature(k)->setCollectedFood(1);
-////                }
+                auto creature = world->getCreature(k);
+                if (!creature->isHasTarget()){
+                    creature->searchForFood(*world);
+                }
+                creature->stepMove(*world);
+                int cellIndex = (int) (creature->getX() / cellSize) +
+                                (((int) (creature->getY() / cellSize)) * nCellX);
+                if (std::abs(cellIndex) > nCell - 1) {
+                    std::cout << (int) (creature->getX() / cellSize) << std::endl;
+                    std::cout << ((int) (creature->getY() / cellSize))  << std::endl;
+                    std::cout << ((int) (creature->getY() / cellSize)) * nCellX << std::endl;
+
+                    creature->getPosition().display();
+                    std::cout << "cellIndex " << cellIndex << std::endl;
+                    std::cout << "Out of domain limits" << std::endl;
+                    exit(1);
+                }
+                creature->setLinkedCell(cellIndex);
+                int hol = cells[cellIndex].getHeadOfList();
+                creature->setLinkedCreature(hol);
+                cells[cellIndex].setHeadOfList(i);
             }
             if (world->getCreaturesCount()) {
                 for (int i = 0; i < world->getCreaturesCount(); ++i) {
