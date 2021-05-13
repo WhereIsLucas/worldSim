@@ -64,10 +64,7 @@ int main() {
             int location = dis(gen);
             creature->putOnSide(location, *world);
         }
-        for (int j = 0; j < stepPerDay; ++j) {
-
-            // reset linked cells
-
+        for (int j = 0; j < stepPerDay; ++j) { //Day loop
             for (int k = 0; k < world->getCreaturesCount(); ++k) {
                 auto creature = world->getCreature(k);
                 if (creature->isHasTarget()) {
@@ -77,16 +74,11 @@ int main() {
                     creature->searchForFood(*world);
                 }
                 creature->stepMove(*world);
-            }
-            if (world->getCreaturesCount()) {
-                for (int k = 0; k < world->getCreaturesCount(); ++k) {
-                    creaturesPrinter->print(world->getCreature(k), day * stepPerDay + j);
-                }
-            } else {
-                creaturesPrinter->printNull(day * stepPerDay + j);
+                creaturesPrinter->print(creature, day * stepPerDay + j);
             }
             foodPrinter->print(world, day * stepPerDay + j);
         }
+
 
         double meanSpeed = 0.;
         unsigned long count = world->getCreaturesCount(); //We take it now before adding other creatures;
@@ -97,6 +89,7 @@ int main() {
         meanSpeed = meanSpeed / (double) count;
 
         double energyTotal = 0.;
+        // This is the noise used for genetic mutations
         std::uniform_real_distribution<> noiseDis(-0.05, 0.05);
         for (int i = 0; i < world->getCreaturesCount(); ++i) { //Night loop
             auto creature = world->getCreature(i);
@@ -110,14 +103,14 @@ int main() {
                     newCreature->putOnSide(location, *world);
                     double parentSpeed = creature->getSpeed();
                     double noise = noiseDis(gen);
-                    newCreature->setSpeed(parentSpeed * (1. + noise));
+                    newCreature->setSpeed(parentSpeed * (1. + noise)); //Speed mutation
                     world->addCreature(*newCreature);
                 }
             } else {
                 world->removeCreature(i); // The creature dies if energyBalance < 0
             }
         }
-        std::cout << "Creatures : " << world->getCreaturesCount() << std::endl;
+        std::cout << "Day " << day << " - creatures : " << world->getCreaturesCount() << std::endl;
         fileName = "results/creatureCount.txt";
         file.open(fileName.c_str(), std::ios::app);
         file.precision(10);
