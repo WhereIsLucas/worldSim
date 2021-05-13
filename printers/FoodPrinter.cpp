@@ -10,7 +10,9 @@ void FoodPrinter::print(World *world, int frameNumber) const {
     file.precision(10);
     if (!world->getFoodItems().empty()){
         for (auto foodItem : world->getFoodItems()) {
-            file << foodItem.getX() << "," << foodItem.getY() << std::endl;
+            if (!foodItem.isEaten()){
+                file << foodItem.getX() << "," << foodItem.getY() << "," << foodItem.getIndex() << std::endl;
+            }
         }
     }
     file.close();

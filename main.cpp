@@ -9,8 +9,8 @@ int main() {
     srand((unsigned) time(0));
 
     int maxDays = 2;
-    int startingCreatures = 1;
-    int foodPerDay = 1;
+    int startingCreatures = 5;
+    int foodPerDay = 50;
     int stepPerDay = 100;
     double worldXWidth = 100.;
     double worldYWidth = 100.;
@@ -26,7 +26,7 @@ int main() {
     for (int i = 0; i < startingCreatures; ++i) {
         auto position = Vector2(((- world->getX() / 2.) + ((float) rand() / RAND_MAX) * world->getX()),
                                 ((- world->getY() / 2.) + ((float) rand() / RAND_MAX) * world->getY()));
-        position.setComponents(0,0);
+//        position.setComponents(0,0);
         auto creature = new Creature(position);
         world->addCreature(*creature);
     }
@@ -96,9 +96,9 @@ int main() {
 
             for (int k = 0; k < world->getCreaturesCount(); ++k) {
                 auto creature = world->getCreature(k);
-//                if (creature->hasTarget()){
-//                    creature->refreshTarget(*world);
-//                }
+                if (creature->isHasTarget()){
+                    creature->refreshTarget(*world);
+                }
                 if (!creature->isHasTarget()){
                     creature->searchForFood(*world);
                 }

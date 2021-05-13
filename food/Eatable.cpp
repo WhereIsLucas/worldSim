@@ -35,3 +35,11 @@ int Eatable::getIndex() const {
 void Eatable::setIndex(int newIndex) {
     Eatable::index = newIndex;
 }
+
+bool Eatable::isEaten() const {
+    return eaten;
+}
+
+void Eatable::setEaten(bool eaten) {
+    Eatable::eaten = eaten;
+}

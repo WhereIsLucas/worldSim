@@ -71,7 +71,7 @@ void World::setY(double y) {
 }
 
 void World::addFoodItem(FoodPlant foodItem,int index) {
-    World::foodItems.insert(World::foodItems.begin() + index,foodItem);
+    World::foodItems.push_back(foodItem);
 }
 
 

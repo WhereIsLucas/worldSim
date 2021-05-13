@@ -15,13 +15,13 @@ float Creature::getCollectedFood() const {
 
 void Creature::stepMove(World &world1) {
     double speed = 1.; // max displacement every increment
-    double e = Creature::eatingRange;
+    double e = this->eatingRange;
     double noise = (-45 + ((float) rand() / RAND_MAX) * 90);
     if (Creature::isHasTarget()) {
         if (fabs(Creature::position.getX() - Creature::target.getPosition().getX()) < e &&
             fabs(Creature::position.getY() - Creature::target.getPosition().getY()) < e) {
             Creature::clearTarget();
-            world1.clearFood(); //this is temporary
+            world1.getFoodItems()[this->target.getIndex()].setEaten(true);
         } else {
             double dx = Creature::target.getPosition().getX() - Creature::getX();
             double dy = Creature::target.getPosition().getY() - Creature::getY();
@@ -99,11 +99,13 @@ void Creature::setTarget(Eatable eatableTarget) {
 void Creature::searchForFood(World &world) {
     double min_distance = 1000000000000.;
     for (auto foodItem : world.getFoodItems()) {
-        double distance = getDistanceBetweenVectors(Creature::getPosition(), foodItem.getPosition());
-        if (distance < min_distance) {
-            min_distance = distance;
-            Creature::setTarget(foodItem);
-            Creature::setHasTarget(true);
+        if (!foodItem.isEaten()){
+            double distance = getDistanceBetweenVectors(Creature::getPosition(), foodItem.getPosition());
+            if (distance < min_distance && distance < this->sensingRange) {
+                min_distance = distance;
+                Creature::setTarget(foodItem);
+                Creature::setHasTarget(true);
+            }
         }
     }
 }
@@ -112,8 +114,11 @@ void Creature::clearTarget() {
     Creature::setHasTarget(false);
 }
 
-void Creature::refreshTarget(World world) {
-    //CHECK IF TARGET STILL IN FOOD
+void Creature::refreshTarget(World &world1) {
+    if (world1.getFoodItems()[this->target.getIndex()].isEaten()){
+        this->clearTarget();
+        this->searchForFood(world1);
+    }
 }
 
 bool Creature::isHasTarget() const {

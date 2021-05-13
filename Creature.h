@@ -47,7 +47,8 @@ private:
     int linkedCell = -9;
     int linkedCreature = -9;
     double angle;
-    float eatingRange = 0.3; //Creatures can eat food within this range
+    float eatingRange = 0.5; //Creatures can eat food within this range
+    float sensingRange = 15; //Creatures can see food within this range
 
 
 public:
@@ -63,7 +64,7 @@ public:
 
     void searchForFood(World &world);
 
-    void refreshTarget(World world);
+    void refreshTarget(World &world);
 };
 
 

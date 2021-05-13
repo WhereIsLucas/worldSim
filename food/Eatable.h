@@ -12,6 +12,12 @@ class Eatable {
 private:
     double foodQuantity = 1.;
     int index = -1;
+    bool eaten = false;
+public:
+    bool isEaten() const;
+
+    void setEaten(bool eaten);
+
 public:
     int getIndex() const;
 
