@@ -7,13 +7,12 @@
 #include <random>
 
 int main() {
-    std::random_device rd;  //Will be used to obtain a seed for the random number engine
-    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+    std::random_device rd;
+    std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis(-.5, .5);
 
     int maxDays = 100;
     int startingCreatures = 4;
-    int foodPerDay = 150;
     int stepPerDay = 100;
 
     double worldXWidth = 200.;
@@ -29,7 +28,7 @@ int main() {
 
     //Maybe we should work with food density
     double foodDensity = 0.00375;
-    foodPerDay = (int) (worldXWidth * worldYWidth * foodDensity);
+    int foodPerDay = (int) (worldXWidth * worldYWidth * foodDensity);
     std::cout << foodPerDay << std::endl;
 
     auto world = new World(worldXWidth, worldYWidth);
@@ -46,12 +45,9 @@ int main() {
     for (int i = 0; i < startingCreatures; ++i) {
         auto position = Vector2(world->getX() * dis(gen),
                                 world->getY() * dis(gen));
-//        position.setComponents(0,0);
         auto creature = new Creature(position);
         world->addCreature(*creature);
     }
-
-
 
     //linked cells
     double cellSize = world->getX() / 5.;
