@@ -5,6 +5,17 @@ import matplotlib.pyplot as plt
 import numpy as np
 from plyer import notification
 
+def plotting_fig(x,y, label):
+    creatureScatGraph = plt.plot(x, y, label=label)
+    showingFrame = 0
+    plt.ylim(bottom=0)
+    plt.title('Creatures')
+    plt.legend()
+    plt.savefig('exports/'+label+'_graphs.png')
+    plt.clf()
+
+    
+
 types = ['float', 'float', 'float','float']
 domainTypes = ['float', 'float']
 creaturesData = []
@@ -19,20 +30,18 @@ creaturesData = np.genfromtxt(path,
                               dtype=types,
                               names=['x', 'y', 'energy','meanSpeed'])
 
-showingFrame = 0
-# creatureScatGraph = plt.plot(creaturesData['x'], creaturesData['y'], label='Creature number')
-speedScatGraph = plt.plot(creaturesData['x'], creaturesData['meanSpeed'], label='Creature meanSpeed')
-# energyScatGraph = plt.plot(creaturesData['x'], creaturesData['energy'], label='Creature energy')
-plt.title('Creatures')
-plt.legend()
+
+plotting_fig(creaturesData['x'],creaturesData['y'], 'Population')
+plotting_fig(creaturesData['x'],creaturesData['meanSpeed'], 'MeanSpeed')
+plotting_fig(creaturesData['x'],creaturesData['energy'], 'Energy')
+
 # plt.gca().set_aspect('equal', adjustable='box')
 
-plt.ylim(bottom=0)
+
 
 # plt.xlabel('x')
 # plt.ylabel('y')
 
-plt.savefig('exports/population_graphs.png')
 
 title = 'worldSim'
 message = 'Graph is ready'
