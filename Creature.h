@@ -72,6 +72,7 @@ public:
 
     void setAngle(double angle);
 
+    void putOnSide(int direction, World &world1);
 };
 
 

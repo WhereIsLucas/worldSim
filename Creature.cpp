@@ -152,3 +152,35 @@ void Creature::incrementEnergy(double energyIncrement) {
 void Creature::decrementEnergy(double energyDecrement) {
     this->energy -= energyDecrement;
 }
+
+void Creature::putOnSide(int direction, World &world1){
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(-.5, .5);
+    double newAngle = 0.;
+    Vector2 newPosition(0,0);
+    switch (direction) {
+        case 0:
+            newPosition.setComponents(((-world1.getX() / 2.)),
+                                   ((world1.getY()) * dis(gen)));
+            newAngle = 180.;
+            break;
+        case 1:
+            newPosition.setComponents(((world1.getX() / 2.)),
+                                   ((world1.getY())*dis(gen)));
+            newAngle = 0.;
+            break;
+        case 2:
+            newPosition.setComponents((((world1.getX())*dis(gen))),
+                                   ((-world1.getY() / 2.)));
+            newAngle = 270.;
+            break;
+        case 3:
+            newPosition.setComponents((((world1.getX())*dis(gen))),
+                                   ((world1.getY() / 2.)));
+            newAngle = 90.;
+            break;
+    }
+    this->setAngle(newAngle);
+    this->position.setComponents(newPosition.getX(),newPosition.getY());
+}

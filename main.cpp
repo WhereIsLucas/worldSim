@@ -44,7 +44,10 @@ int main() {
     //We start the world and place creatures on the sides
     for (int i = 0; i < startingCreatures; ++i) {
         int location = dis(gen);
-        world->addACreatureOnSide(location);
+        auto position = Vector2(0, 0);
+        auto newCreature = new Creature(position);
+        newCreature->putOnSide(location, *world);
+        world->addCreature(*newCreature);
     }
 
     std::cout << "Cells are positioned" << std::endl;
@@ -53,9 +56,12 @@ int main() {
     for (int day = 0; day < maxDays; ++day) {
         world->clearFood();
         world->prepareFood(foodPerDay);
-        for (int i = 0; i < world->getCreaturesCount(); ++i) {
-            world->getCreature(i)->setCollectedFood(0.);
-            world->getCreature(i)->clearTarget();
+        for (int i = 0; i < world->getCreaturesCount(); ++i) { //Morning loop
+            int location = dis(gen);
+            auto creature = world->getCreature(i);
+            creature->setCollectedFood(0.);
+            creature->clearTarget();
+            creature->putOnSide(location, *world);
         }
         for (int j = 0; j < stepPerDay; ++j) {
 
@@ -82,14 +88,17 @@ int main() {
         }
 
         double energyTotal = 0.;
-        for (int i = 0; i < world->getCreaturesCount(); ++i) {
+        for (int i = 0; i < world->getCreaturesCount(); ++i) { //Night loop
             auto creature = world->getCreature(i);
             double energyBalance = creature->getEnergy() + creature->getCollectedFood();
             energyTotal += energyBalance;
             if (energyBalance > 0.) {
                 if (energyBalance > 2.) {
                     int location = dis(gen);
-                    world->addACreatureOnSide(location);
+                    auto position = Vector2(0, 0);
+                    auto newCreature = new Creature(position);
+                    newCreature->putOnSide(location, *world);
+                    world->addCreature(*newCreature);
                 }
             } else {
                 world->removeCreature(i); // The creature dies is energyBalance < 0

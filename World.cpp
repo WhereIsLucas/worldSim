@@ -78,38 +78,3 @@ void World::setY(double y) {
 void World::addFoodItem(FoodPlant foodItem, int index) {
     World::foodItems.push_back(foodItem);
 }
-
-void World::addACreatureOnSide(int direction){
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dis(-.5, .5);
-    double angle = 0.;
-    Vector2 position(0,0);
-    switch (direction) {
-        case 0:
-            position.setComponents(((-World::getX() / 2.)),
-                                   ((World::getY()) * dis(gen)));
-            angle = 180.;
-            break;
-        case 1:
-            position.setComponents(((World::getX() / 2.)),
-                                   ((World::getY())*dis(gen)));
-            angle = 0.;
-            break;
-        case 2:
-            position.setComponents((((World::getX())*dis(gen))),
-                                   ((-World::getY() / 2.)));
-            angle = 270.;
-            break;
-        case 3:
-            position.setComponents((((World::getX())*dis(gen))),
-                                   ((World::getY() / 2.)));
-            angle = 90.;
-            break;
-    }
-
-    auto creature = new Creature(position);
-    creature->setAngle(angle);
-    World::addCreature(*creature);
-}
-
