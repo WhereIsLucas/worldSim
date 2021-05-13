@@ -32,7 +32,7 @@ double World::getY() const {
 
 void World::prepareFood(int foodQuantity) {
     for (int i = 0; i < foodQuantity; ++i) {
-        auto position = Vector2((-50 + ((float) rand()/RAND_MAX) * World::getX()), (-50 + ((float) rand()/RAND_MAX) * World::getY()));
+        auto position = Vector2((-World::getX()/2. + ((float) rand()/RAND_MAX) * World::getX()), (-World::getY()/2. + ((float) rand()/RAND_MAX) * World::getY()));
 //        position.setComponents(0.,-30.);
         auto foodItem = new FoodPlant(position);
         foodItem->setIndex(i);
