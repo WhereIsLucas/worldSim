@@ -14,7 +14,6 @@ double Creature::getCollectedFood() {
 }
 
 void Creature::stepMove(World &world1) {
-    double speed = 1.; // max displacement every increment
     double e = this->eatingRange;
     double noise = (-45 + ((double) rand() / RAND_MAX) * 90);
     if (Creature::isHasTarget()) {
@@ -48,8 +47,8 @@ void Creature::stepMove(World &world1) {
         }
     }
 
-    Vector2 dVec = Vector2((cos(Creature::angle * M_PI / 180.) * speed),
-                           (sin(Creature::angle * M_PI / 180.) * speed));
+    Vector2 dVec = Vector2((cos(Creature::angle * M_PI / 180.) * this->speed),
+                           (sin(Creature::angle * M_PI / 180.) * this->speed));
     Creature::position = Creature::position + dVec;
 }
 

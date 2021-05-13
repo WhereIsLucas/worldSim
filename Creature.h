@@ -36,8 +36,7 @@ public:
     void clearTarget();
 
 private:
-    double collectedFood = 0.;
-    bool hasTarget = false;
+
 public:
     bool isHasTarget() const;
 
@@ -49,7 +48,9 @@ private:
     double angle;
     double eatingRange = 0.5; //Creatures can eat food within this range
     double sensingRange = 15; //Creatures can detect food within this range
-
+    double speed = 1.;
+    double collectedFood = 0.;
+    bool hasTarget = false;
 
 public:
     void setCollectedFood(double collectedFoodArg);
