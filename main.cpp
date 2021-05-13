@@ -11,7 +11,7 @@ int main() {
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dis(0, 3);
 
-    int maxDays = 5;
+    int maxDays = 100;
     int startingCreatures = 4;
     int stepPerDay = 100;
 
@@ -60,6 +60,7 @@ int main() {
             int location = dis(gen);
             auto creature = world->getCreature(i);
             creature->setCollectedFood(0.);
+            creature->setEnergy(0.);
             creature->clearTarget();
             creature->putOnSide(location, *world);
         }
