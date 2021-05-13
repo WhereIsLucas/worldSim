@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from plyer import notification
 
-types = ['float', 'float', 'float']
+types = ['float', 'float', 'float','float']
 domainTypes = ['float', 'float']
 creaturesData = []
 foodData = []
@@ -17,10 +17,11 @@ path = "./cmake-build-debug/results/creatureCount.txt"
 creaturesData = np.genfromtxt(path,
                               delimiter=',',
                               dtype=types,
-                              names=['x', 'y', 'energy'])
+                              names=['x', 'y', 'energy','meanSpeed'])
 
 showingFrame = 0
-creatureScatGraph = plt.plot(creaturesData['x'], creaturesData['y'], label='Creature number')
+# creatureScatGraph = plt.plot(creaturesData['x'], creaturesData['y'], label='Creature number')
+speedScatGraph = plt.plot(creaturesData['x'], creaturesData['meanSpeed'], label='Creature meanSpeed')
 # energyScatGraph = plt.plot(creaturesData['x'], creaturesData['energy'], label='Creature energy')
 plt.title('Creatures')
 plt.legend()

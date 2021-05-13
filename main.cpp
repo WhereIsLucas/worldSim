@@ -11,7 +11,7 @@ int main() {
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dis(0, 3);
 
-    int maxDays = 5;
+    int maxDays = 1000;
     int startingCreatures = 4;
     int stepPerDay = 100;
 
@@ -27,7 +27,7 @@ int main() {
     file.close();
 
     //Maybe we should work with food density
-    double foodDensity = 0.00375 * 2.;
+    double foodDensity = 0.00375;
     int foodPerDay = (int) (worldXWidth * worldYWidth * foodDensity);
     std::cout << foodPerDay << std::endl;
 
@@ -88,7 +88,16 @@ int main() {
             foodPrinter->print(world, day * stepPerDay + j);
         }
 
+        double meanSpeed = 0.;
+        unsigned long count = world->getCreaturesCount(); //We take it now before adding other creatures;
+        for (int i = 0; i < world->getCreaturesCount(); ++i) { //Speed mean loop
+            auto creature = world->getCreature(i);
+            meanSpeed += creature->getSpeed();
+        }
+        meanSpeed = meanSpeed / (double) count;
+
         double energyTotal = 0.;
+        std::uniform_real_distribution<> noiseDis(-0.05, 0.05);
         for (int i = 0; i < world->getCreaturesCount(); ++i) { //Night loop
             auto creature = world->getCreature(i);
             double energyBalance = creature->getEnergy() + creature->getCollectedFood();
@@ -99,6 +108,9 @@ int main() {
                     auto position = Vector2(0, 0);
                     auto newCreature = new Creature(position);
                     newCreature->putOnSide(location, *world);
+                    double parentSpeed = creature->getSpeed();
+                    double noise = noiseDis(gen);
+                    newCreature->setSpeed(parentSpeed * (1. + noise));
                     world->addCreature(*newCreature);
                 }
             } else {
@@ -109,7 +121,8 @@ int main() {
         fileName = "results/creatureCount.txt";
         file.open(fileName.c_str(), std::ios::app);
         file.precision(10);
-        file << std::to_string(day) << "," << world->getCreaturesCount() << "," << energyTotal << std::endl;
+        file << std::to_string(day) << "," << world->getCreaturesCount() << "," << energyTotal << "," << meanSpeed
+             << std::endl;
         file.close();
     }
 

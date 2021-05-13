@@ -73,6 +73,10 @@ public:
     void setAngle(double angle);
 
     void putOnSide(int direction, World &world1);
+
+    double getSpeed() const;
+
+    void setSpeed(double speed);
 };
 
 

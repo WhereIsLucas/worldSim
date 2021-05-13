@@ -55,7 +55,7 @@ void Creature::stepMove(World &world1) {
     Vector2 dVec = Vector2((cos(this->angle * M_PI / 180.) * this->speed),
                            (sin(this->angle * M_PI / 180.) * this->speed));
     this->position = this->position + dVec;
-    this->decrementEnergy(0.05);
+    this->decrementEnergy(speed/100.);
 }
 
 
@@ -185,4 +185,12 @@ void Creature::putOnSide(int direction, World &world1){
     }
     this->setAngle(newAngle);
     this->position.setComponents(newPosition.getX(),newPosition.getY());
+}
+
+double Creature::getSpeed() const {
+    return speed;
+}
+
+void Creature::setSpeed(double newSpeed) {
+    Creature::speed = newSpeed;
 }
