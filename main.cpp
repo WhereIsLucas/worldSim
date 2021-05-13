@@ -3,11 +3,13 @@
 #include "printers/CreaturesPrinter.h"
 #include "printers/FoodPrinter.h"
 #include "Cell.h"
-#include <ctime>
 #include <fstream>
+#include <random>
 
 int main() {
-    srand((unsigned) time(0));
+    std::random_device rd;  //Will be used to obtain a seed for the random number engine
+    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+    std::uniform_real_distribution<> dis(-.5, .5);
 
     int maxDays = 100;
     int startingCreatures = 4;
@@ -42,8 +44,8 @@ int main() {
 
     //We start the world and place creatures randomly
     for (int i = 0; i < startingCreatures; ++i) {
-        auto position = Vector2(((-world->getX() / 2.) + ((float) rand() / RAND_MAX) * world->getX()),
-                                ((-world->getY() / 2.) + ((float) rand() / RAND_MAX) * world->getY()));
+        auto position = Vector2(world->getX() * dis(gen),
+                                world->getY() * dis(gen));
 //        position.setComponents(0,0);
         auto creature = new Creature(position);
         world->addCreature(*creature);
@@ -152,8 +154,8 @@ int main() {
         for (int i = 0; i < world->getCreaturesCount(); ++i) {
             if (world->getCreature(i)->getCollectedFood() > 0.) {
                 if (world->getCreature(i)->getCollectedFood() > 2.) {
-                    auto position = Vector2(((-world->getX() / 2.) + ((float) rand() / RAND_MAX) * world->getX()),
-                                            ((-world->getY() / 2.) + ((float) rand() / RAND_MAX) * world->getY()));
+                    auto position = Vector2((world->getX() * dis(gen)),
+                                            world->getY() * dis(gen));
                     auto creature = new Creature(position);
                     world->addCreature(*creature);
                 }

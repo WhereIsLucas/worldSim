@@ -7,6 +7,7 @@
 #include "World.h"
 #include "utilities/Vector2.h"
 #include <cmath>
+#include <random>
 #include <iostream>
 
 double Creature::getCollectedFood() {
@@ -15,7 +16,11 @@ double Creature::getCollectedFood() {
 
 void Creature::stepMove(World &world1) {
     double e = this->eatingRange;
-    double noise = (-45 + ((double) rand() / RAND_MAX) * 90);
+
+    std::random_device rd;  //Will be used to obtain a seed for the random number engine
+    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+    std::uniform_real_distribution<> dis(-45, 45);
+    double noise = dis(gen);
     if (Creature::isHasTarget()) {
         if (fabs(Creature::position.getX() - Creature::target.getPosition().getX()) < e &&
             fabs(Creature::position.getY() - Creature::target.getPosition().getY()) < e) {

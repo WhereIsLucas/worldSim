@@ -48,14 +48,14 @@ plt.legend()
 # plt.gca().set_aspect('equal', adjustable='box')
 plt.axis("equal")
 
-#import the world parameters
+# import the world parameters
 world = np.genfromtxt('./cmake-build-debug/results/world.txt',
-              delimiter=',',
-              dtype=types,
-              names=['x', 'y'])
+                      delimiter=',',
+                      dtype=types,
+                      names=['x', 'y'])
 
-plt.xlim(-world['x']*0.55, world['x']*0.55)
-plt.ylim(-world['y']*0.55, world['y']*0.55)
+plt.xlim(-world['x'] * 0.55, world['x'] * 0.55)
+plt.ylim(-world['y'] * 0.55, world['y'] * 0.55)
 
 plt.savefig('exports/test.png')
 

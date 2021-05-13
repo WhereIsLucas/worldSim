@@ -3,6 +3,7 @@
 //
 
 #include <cstdlib>
+#include <random>
 #include "World.h"
 
 World::World(double x, double y) : x(x), y(y) {
@@ -31,11 +32,13 @@ double World::getY() const {
 }
 
 void World::prepareFood(int foodQuantity) {
+    std::random_device rd;  //Will be used to obtain a seed for the random number engine
+    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+    std::uniform_real_distribution<> dis(-.5, .5);
 
     for (int i = 0; i < foodQuantity; ++i) {
-        auto position = Vector2((-World::getX() / 2. + ((float) rand() / RAND_MAX) * World::getX()),
-                                (-World::getY() / 2. + ((float) rand() / RAND_MAX) * World::getY()));
-//        position.setComponents(0.,-30.);
+        auto position = Vector2(this->getX() * dis(gen),
+                                this->getY() * dis(gen));
         auto foodItem = new FoodPlant(position);
         foodItem->setIndex(i);
         World::addFoodItem(*foodItem, i);
