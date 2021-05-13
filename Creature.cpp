@@ -18,10 +18,9 @@ double Creature::getCollectedFood() {
 }
 
 void Creature::stepMove(World &world1) {
-    std::random_device rd;  //Will be used to obtain a seed for the random number engine
-    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_real_distribution<> dis(-45, 45);
+    std::uniform_real_distribution<> dis(-45., 45.);
     double noise = dis(gen);
+    std::cout << "noise : " << noise << std::endl;
     if (this->hasTarget) {
         if (fabs(this->position.getX() - this->target.getPosition().getX()) < this->eatingRange &&
             fabs(this->position.getY() - this->target.getPosition().getY()) < this->eatingRange) {
