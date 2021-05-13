@@ -20,7 +20,6 @@ double Creature::getCollectedFood() {
 void Creature::stepMove(World &world1) {
     std::uniform_real_distribution<> dis(-45., 45.);
     double noise = dis(gen);
-    std::cout << "noise : " << noise << std::endl;
     if (this->hasTarget) {
         if (fabs(this->position.getX() - this->target.getPosition().getX()) < this->eatingRange &&
             fabs(this->position.getY() - this->target.getPosition().getY()) < this->eatingRange) {
@@ -158,7 +157,7 @@ void Creature::decrementEnergy(double energyDecrement) {
 }
 
 void Creature::putOnSide(int direction, World &world1){
-    std::uniform_real_distribution<> dis(-1., 1.);
+    std::uniform_real_distribution<> dis(-.5, .5);
     double newAngle = 0.;
     Vector2 newPosition(0,0);
     switch (direction) {
