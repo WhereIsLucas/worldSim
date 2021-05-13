@@ -32,7 +32,7 @@ void Creature::stepMove(World &world1) {
             Creature::angle = targetAngle + noise / 3.;
         }
     }
-    if (fabs(this->getX()) >= world1.getX() / 2. || fabs(this->getY()) >= world1.getY() / 2.) {
+    if (fabs(this->getX()) >= world1.getX() / 2. || fabs(this->getY()) >= world1.getY() / 2.) { //If close to the borders
         if (this->getX() >= world1.getX() / 2.) {
             this->position.setX(world1.getX() / 2.);
         } else if (this->getX() <= -world1.getX() / 2.) {
@@ -43,7 +43,9 @@ void Creature::stepMove(World &world1) {
         } else if (this->getY() <= -world1.getY() / 2.) {
             this->position.setY(-world1.getY() / 2.);
         }
-        this->angle = this->angle + 180.;
+        double dx = 0 - this->getX();
+        double dy = 0 - this->getY();
+        this->angle = atan2(-dx, dy) * (180 / M_PI) + 90; //angle towards the center
     } else {
         if (!this->isHasTarget()) { // Trying to remove the ping-pong against boundaries (but failing)
             this->angle = this->angle + noise; // in degrees
@@ -53,7 +55,7 @@ void Creature::stepMove(World &world1) {
     Vector2 dVec = Vector2((cos(this->angle * M_PI / 180.) * this->speed),
                            (sin(this->angle * M_PI / 180.) * this->speed));
     this->position = this->position + dVec;
-    this->decrementEnergy(0.01);
+    this->decrementEnergy(0.05);
 }
 
 
@@ -163,22 +165,22 @@ void Creature::putOnSide(int direction, World &world1){
         case 0:
             newPosition.setComponents(((-world1.getX() / 2.)),
                                    ((world1.getY()) * dis(gen)));
-            newAngle = 180.;
+            newAngle = 0.;
             break;
         case 1:
             newPosition.setComponents(((world1.getX() / 2.)),
                                    ((world1.getY())*dis(gen)));
-            newAngle = 0.;
+            newAngle = 180.;
             break;
         case 2:
             newPosition.setComponents((((world1.getX())*dis(gen))),
                                    ((-world1.getY() / 2.)));
-            newAngle = 270.;
+            newAngle = 90.;
             break;
         case 3:
             newPosition.setComponents((((world1.getX())*dis(gen))),
                                    ((world1.getY() / 2.)));
-            newAngle = 90.;
+            newAngle = 270.;
             break;
     }
     this->setAngle(newAngle);

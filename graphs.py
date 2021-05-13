@@ -21,8 +21,8 @@ creaturesData = np.genfromtxt(path,
 
 showingFrame = 0
 creatureScatGraph = plt.plot(creaturesData['x'], creaturesData['y'], label='Creature number')
-energyScatGraph = plt.plot(creaturesData['x'], creaturesData['energy'], label='Creature energy')
-plt.title('Scatter plot test')
+# energyScatGraph = plt.plot(creaturesData['x'], creaturesData['energy'], label='Creature energy')
+plt.title('Creatures')
 plt.legend()
 # plt.gca().set_aspect('equal', adjustable='box')
 

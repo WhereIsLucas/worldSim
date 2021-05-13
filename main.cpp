@@ -11,7 +11,7 @@ int main() {
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dis(0, 3);
 
-    int maxDays = 100;
+    int maxDays = 5;
     int startingCreatures = 4;
     int stepPerDay = 100;
 
@@ -57,11 +57,11 @@ int main() {
         world->clearFood();
         world->prepareFood(foodPerDay);
         for (int i = 0; i < world->getCreaturesCount(); ++i) { //Morning loop
-            int location = dis(gen);
             auto creature = world->getCreature(i);
             creature->setCollectedFood(0.);
             creature->setEnergy(0.);
             creature->clearTarget();
+            int location = dis(gen);
             creature->putOnSide(location, *world);
         }
         for (int j = 0; j < stepPerDay; ++j) {
@@ -102,7 +102,7 @@ int main() {
                     world->addCreature(*newCreature);
                 }
             } else {
-                world->removeCreature(i); // The creature dies is energyBalance < 0
+                world->removeCreature(i); // The creature dies if energyBalance < 0
             }
         }
         std::cout << "Creatures : " << world->getCreaturesCount() << std::endl;
