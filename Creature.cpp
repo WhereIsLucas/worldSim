@@ -55,7 +55,7 @@ void Creature::stepMove(World &world1) {
     Vector2 dVec = Vector2((cos(this->angle * M_PI / 180.) * this->speed),
                            (sin(this->angle * M_PI / 180.) * this->speed));
     this->position = this->position + dVec;
-    this->decrementEnergy(speed/100.);
+    this->decrementEnergy(speed*speed/100.);
 }
 
 
