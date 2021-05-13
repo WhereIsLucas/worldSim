@@ -13,46 +13,31 @@ class World;
 #include <optional>
 
 class Creature {
-public:
-    Creature(Vector2 &position);
-
-    double getCollectedFood();
-
-    void stepMove(World &world1);
-
-    Vector2 &getPosition();
-
-    Eatable &getTarget();
-
-    Vector2 &getVelocity();
-
 private:
     Vector2 position;
     Vector2 velocity;
     Eatable target;
-public:
-    void setTarget(Eatable target);
-
-    void clearTarget();
-
-private:
-
-public:
-    bool isHasTarget() const;
-
-    void setHasTarget(bool hasTarget);
-
-private:
     int linkedCell = -9;
     int linkedCreature = -9;
     double angle;
     double eatingRange = 0.5; //Creatures can eat food within this range
     double sensingRange = 15; //Creatures can detect food within this range
     double speed = 1.;
+    double energy = 0.;
     double collectedFood = 0.;
     bool hasTarget = false;
 
 public:
+    Creature(Vector2 &position);
+
+    void setTarget(Eatable target);
+
+    void clearTarget();
+
+    bool isHasTarget() const;
+
+    void setHasTarget(bool hasTarget);
+
     void setCollectedFood(double collectedFoodArg);
 
     double getX();
@@ -67,7 +52,26 @@ public:
 
     void refreshTarget(World &world);
 
+    double getCollectedFood();
+
+    void stepMove(World &world1);
+
+    Vector2 &getPosition();
+
+    Eatable &getTarget();
+
+    Vector2 &getVelocity();
+
+    double getEnergy();
+
+    void setEnergy(double energyValue);
+
+    void incrementEnergy(double energyIncrement);
+
+    void decrementEnergy(double energyDecrement);
+
     void setAngle(double angle);
+
 };
 
 

@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from plyer import notification
 
-types = ['float', 'float']
+types = ['float', 'float', 'float']
 domainTypes = ['float', 'float']
 creaturesData = []
 foodData = []
@@ -17,10 +17,11 @@ path = "./cmake-build-debug/results/creatureCount.txt"
 creaturesData = np.genfromtxt(path,
                               delimiter=',',
                               dtype=types,
-                              names=['x', 'y'])
+                              names=['x', 'y', 'energy'])
 
 showingFrame = 0
 creatureScatGraph = plt.plot(creaturesData['x'], creaturesData['y'], label='Creature number')
+energyScatGraph = plt.plot(creaturesData['x'], creaturesData['energy'], label='Creature energy')
 plt.title('Scatter plot test')
 plt.legend()
 # plt.gca().set_aspect('equal', adjustable='box')
@@ -31,7 +32,6 @@ plt.ylim(bottom=0)
 # plt.ylabel('y')
 
 plt.savefig('exports/population_graphs.png')
-
 
 title = 'worldSim'
 message = 'Graph is ready'

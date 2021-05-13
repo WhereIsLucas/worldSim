@@ -38,7 +38,7 @@ public:
     std::vector<FoodPlant> &getFoodItems();
 
     void removeFoodItem(int index);
-    void putCreaturesOnSide(int direction);
+    void addACreatureOnSide(int direction);
 
 private:
     double x;

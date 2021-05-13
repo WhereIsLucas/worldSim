@@ -79,11 +79,11 @@ void World::addFoodItem(FoodPlant foodItem, int index) {
     World::foodItems.push_back(foodItem);
 }
 
-void World::putCreaturesOnSide(int direction){
+void World::addACreatureOnSide(int direction){
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis(-.5, .5);
-    double angle;
+    double angle = 0.;
     Vector2 position(0,0);
     switch (direction) {
         case 0:

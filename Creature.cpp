@@ -53,6 +53,7 @@ void Creature::stepMove(World &world1) {
     Vector2 dVec = Vector2((cos(this->angle * M_PI / 180.) * this->speed),
                            (sin(this->angle * M_PI / 180.) * this->speed));
     this->position = this->position + dVec;
+    this->decrementEnergy(0.01);
 }
 
 
@@ -132,6 +133,22 @@ bool Creature::isHasTarget() const {
     return hasTarget;
 }
 
-void Creature::setHasTarget(bool hasTarget) {
-    Creature::hasTarget = hasTarget;
+void Creature::setHasTarget(bool hasTargetValue) {
+    this->hasTarget = hasTargetValue;
+}
+
+double Creature::getEnergy() {
+    return this->energy;
+}
+
+void Creature::setEnergy(double energyValue) {
+    this->energy = energyValue;
+}
+
+void Creature::incrementEnergy(double energyIncrement) {
+    this->energy += energyIncrement;
+}
+
+void Creature::decrementEnergy(double energyDecrement) {
+    this->energy -= energyDecrement;
 }

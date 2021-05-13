@@ -11,7 +11,7 @@ int main() {
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dis(0, 3);
 
-    int maxDays = 100;
+    int maxDays = 5;
     int startingCreatures = 4;
     int stepPerDay = 100;
 
@@ -27,7 +27,7 @@ int main() {
     file.close();
 
     //Maybe we should work with food density
-    double foodDensity = 0.00375;
+    double foodDensity = 0.00375 * 2.;
     int foodPerDay = (int) (worldXWidth * worldYWidth * foodDensity);
     std::cout << foodPerDay << std::endl;
 
@@ -36,59 +36,15 @@ int main() {
     //We prepare the printers & clear the old files
     auto creaturesPrinter = new CreaturesPrinter("results/creatures/");
     auto foodPrinter = new FoodPrinter("results/food/");
-    creaturesPrinter->clearPrints(10000);
-    foodPrinter->clearPrints(10000);
+    creaturesPrinter->clearPrints(25000);
+    foodPrinter->clearPrints(25000);
     fileName = "results/creatureCount.txt";
     remove(fileName.c_str());
 
     //We start the world and place creatures on the sides
     for (int i = 0; i < startingCreatures; ++i) {
-        int location = dis(gen) ;
-        world->putCreaturesOnSide(location);
-    }
-
-    //linked cells
-    double cellSize = world->getX() / 5.;
-    int nCellX = (int) ((world->getX()) / cellSize);
-    int nCellY = (int) ((world->getY()) / cellSize);
-    int nCell = nCellX * nCellY;
-    Cell *cells = new Cell[nCell];
-
-    std::cout << "Cells values are initialized" << std::endl;
-    std::cout << "nCellX " << nCellX << std::endl;
-    std::cout << "nCellY " << nCellY << std::endl;
-    std::cout << "nCells " << nCell << std::endl;
-
-    int i;
-    int ix, iy;
-    for (i = 0; i < nCell; i++) {
-        cells[i].initCell(i);
-        iy = i / nCellX;
-        ix = i % nCellX;
-        if (ix > 0) { //if not first on the column
-            cells[i].addNeighbor(ix + (iy * nCellX) - 1);
-        }
-        if (ix < nCellX - 1) { //if not last on the column
-            cells[i].addNeighbor(ix + (iy * nCellX) + 1);
-        }
-        if (iy > 0) { //if not on first line
-            cells[i].addNeighbor(ix + (iy - 1) * nCellX);
-            if (ix > 0) { //if not first on the line
-                cells[i].addNeighbor(ix + (iy - 1) * nCellX - 1);
-            }
-            if (ix < nCellX - 1) { //if not last on the line
-                cells[i].addNeighbor(ix + (iy - 1) * nCellX + 1);
-            }
-        }
-        if (iy < nCellY - 1) { //if not on last line
-            cells[i].addNeighbor(ix + ((iy + 1) * nCellX));
-            if (ix > 0) { //if not first on the line
-                cells[i].addNeighbor(ix + ((iy + 1) * nCellX) - 1);
-            }
-            if (ix < nCellX - 1) { //if not last on the line
-                cells[i].addNeighbor(ix + ((iy + 1) * nCellX) + 1);
-            }
-        }
+        int location = dis(gen);
+        world->addACreatureOnSide(location);
     }
 
     std::cout << "Cells are positioned" << std::endl;
@@ -104,9 +60,6 @@ int main() {
         for (int j = 0; j < stepPerDay; ++j) {
 
             // reset linked cells
-            for (i = 0; i < nCell; i++) {
-                cells[i].setHeadOfList(-9);
-            }
 
             for (int k = 0; k < world->getCreaturesCount(); ++k) {
                 auto creature = world->getCreature(k);
@@ -117,23 +70,6 @@ int main() {
                     creature->searchForFood(*world);
                 }
                 creature->stepMove(*world);
-
-                int cellIndex = (int) (creature->getX() / cellSize) +
-                                (((int) (creature->getY() / cellSize)) * nCellX);
-                if (std::abs(cellIndex) > nCell - 1) {
-                    std::cout << (int) (creature->getX() / cellSize) << std::endl;
-                    std::cout << ((int) (creature->getY() / cellSize)) << std::endl;
-                    std::cout << ((int) (creature->getY() / cellSize)) * nCellX << std::endl;
-
-                    creature->getPosition().display();
-                    std::cout << "cellIndex " << cellIndex << std::endl;
-                    std::cout << "Out of domain limits" << std::endl;
-                    exit(1);
-                }
-                creature->setLinkedCell(cellIndex);
-                int hol = cells[cellIndex].getHeadOfList();
-                creature->setLinkedCreature(hol);
-                cells[cellIndex].setHeadOfList(i);
             }
             if (world->getCreaturesCount()) {
                 for (int k = 0; k < world->getCreaturesCount(); ++k) {
@@ -145,25 +81,25 @@ int main() {
             foodPrinter->print(world, day * stepPerDay + j);
         }
 
+        double energyTotal = 0.;
         for (int i = 0; i < world->getCreaturesCount(); ++i) {
-            if (world->getCreature(i)->getCollectedFood() > 0.) {
-                int location = dis(gen);
-                world->removeCreature(i);
-                world->putCreaturesOnSide(location);
-                if (world->getCreature(i)->getCollectedFood() > 2.) {
-                    location = dis(gen);
-                    world->putCreaturesOnSide(location);
+            auto creature = world->getCreature(i);
+            double energyBalance = creature->getEnergy() + creature->getCollectedFood();
+            energyTotal += energyBalance;
+            if (energyBalance > 0.) {
+                if (energyBalance > 2.) {
+                    int location = dis(gen);
+                    world->addACreatureOnSide(location);
                 }
             } else {
-                world->removeCreature(i);
+                world->removeCreature(i); // The creature dies is energyBalance < 0
             }
         }
         std::cout << "Creatures : " << world->getCreaturesCount() << std::endl;
-        std::string fileName = "results/creatureCount.txt";
-        std::ofstream file;
+        fileName = "results/creatureCount.txt";
         file.open(fileName.c_str(), std::ios::app);
         file.precision(10);
-        file << std::to_string(day) << "," << world->getCreaturesCount() << std::endl;
+        file << std::to_string(day) << "," << world->getCreaturesCount() << "," << energyTotal << std::endl;
         file.close();
     }
 

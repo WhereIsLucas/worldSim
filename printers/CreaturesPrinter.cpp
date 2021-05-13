@@ -8,7 +8,7 @@ void CreaturesPrinter::print(Creature *creature, int frameNumber) const {
     std::ofstream file;
     file.open(fileName.c_str(), std::ios::app);
     file.precision(10);
-    file << creature->getX() << "," << creature->getY() << std::endl;
+    file << creature->getX() << "," << creature->getY() << "," << creature->getEnergy() + creature->getCollectedFood() << std::endl;
     file.close();
 }
 
