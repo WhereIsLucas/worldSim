@@ -16,7 +16,7 @@ class Creature {
 public:
     Creature(Vector2 &position);
 
-    float getCollectedFood() const;
+    double getCollectedFood();
 
     void stepMove(World &world1);
 
@@ -36,7 +36,7 @@ public:
     void clearTarget();
 
 private:
-    float collectedFood = 0.;
+    double collectedFood = 0.;
     bool hasTarget = false;
 public:
     bool isHasTarget() const;
@@ -47,12 +47,12 @@ private:
     int linkedCell = -9;
     int linkedCreature = -9;
     double angle;
-    float eatingRange = 0.5; //Creatures can eat food within this range
-    float sensingRange = 15; //Creatures can see food within this range
+    double eatingRange = 0.5; //Creatures can eat food within this range
+    double sensingRange = 15; //Creatures can detect food within this range
 
 
 public:
-    void setCollectedFood(float collectedFoodArg);
+    void setCollectedFood(double collectedFoodArg);
 
     double getX();
 

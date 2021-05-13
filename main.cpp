@@ -4,28 +4,38 @@
 #include "printers/FoodPrinter.h"
 #include "Cell.h"
 #include <ctime>
+#include <fstream>
 
 int main() {
     srand((unsigned) time(0));
 
-    int maxDays = 2;
-    int startingCreatures = 5;
-    int foodPerDay = 50;
+    int maxDays = 100;
+    int startingCreatures = 4;
+    int foodPerDay = 150;
     int stepPerDay = 100;
-    double worldXWidth = 100.;
-    double worldYWidth = 100.;
+
+    double worldXWidth = 200.;
+    double worldYWidth = 200.;
+
+    //Maybe we should work with food density
+    double foodDensity = 0.00375;
+    foodPerDay = (int) (worldXWidth * worldYWidth * foodDensity);
+    std::cout << foodPerDay << std::endl;
+
     auto world = new World(worldXWidth, worldYWidth);
 
     //We prepare the printers & clear the old files
     auto creaturesPrinter = new CreaturesPrinter("results/creatures/");
-    creaturesPrinter->clearPrints(maxDays * stepPerDay);
     auto foodPrinter = new FoodPrinter("results/food/");
-    foodPrinter->clearPrints(maxDays * stepPerDay);
+    creaturesPrinter->clearPrints(10000);
+    foodPrinter->clearPrints(10000);
+    std::string fileName = "results/creatureCount.txt";
+    remove(fileName.c_str());
 
     //We start the world and place creatures randomly
     for (int i = 0; i < startingCreatures; ++i) {
-        auto position = Vector2(((- world->getX() / 2.) + ((float) rand() / RAND_MAX) * world->getX()),
-                                ((- world->getY() / 2.) + ((float) rand() / RAND_MAX) * world->getY()));
+        auto position = Vector2(((-world->getX() / 2.) + ((float) rand() / RAND_MAX) * world->getX()),
+                                ((-world->getY() / 2.) + ((float) rand() / RAND_MAX) * world->getY()));
 //        position.setComponents(0,0);
         auto creature = new Creature(position);
         world->addCreature(*creature);
@@ -96,10 +106,10 @@ int main() {
 
             for (int k = 0; k < world->getCreaturesCount(); ++k) {
                 auto creature = world->getCreature(k);
-                if (creature->isHasTarget()){
+                if (creature->isHasTarget()) {
                     creature->refreshTarget(*world);
                 }
-                if (!creature->isHasTarget()){
+                if (!creature->isHasTarget()) {
                     creature->searchForFood(*world);
                 }
                 creature->stepMove(*world);
@@ -108,7 +118,7 @@ int main() {
                                 (((int) (creature->getY() / cellSize)) * nCellX);
                 if (std::abs(cellIndex) > nCell - 1) {
                     std::cout << (int) (creature->getX() / cellSize) << std::endl;
-                    std::cout << ((int) (creature->getY() / cellSize))  << std::endl;
+                    std::cout << ((int) (creature->getY() / cellSize)) << std::endl;
                     std::cout << ((int) (creature->getY() / cellSize)) * nCellX << std::endl;
 
                     creature->getPosition().display();
@@ -131,14 +141,25 @@ int main() {
             foodPrinter->print(world, day * stepPerDay + j);
         }
 
-//        for (int i = 0; i < world->getCreaturesCount(); ++i) {
-//            if (world->getCreature(i)->getCollectedFood() > 0) {
-//
-//            } else {
-//                world->removeCreature(i);
-//            }
-//        }
+        for (int i = 0; i < world->getCreaturesCount(); ++i) {
+            if (world->getCreature(i)->getCollectedFood() > 0.) {
+                if (world->getCreature(i)->getCollectedFood() > 2.) {
+                    auto position = Vector2(((-world->getX() / 2.) + ((float) rand() / RAND_MAX) * world->getX()),
+                                            ((-world->getY() / 2.) + ((float) rand() / RAND_MAX) * world->getY()));
+                    auto creature = new Creature(position);
+                    world->addCreature(*creature);
+                }
+            } else {
+                world->removeCreature(i);
+            }
+        }
         std::cout << "Creatures : " << world->getCreaturesCount() << std::endl;
+        std::string fileName = "results/creatureCount.txt";
+        std::ofstream file;
+        file.open(fileName.c_str(), std::ios::app);
+        file.precision(10);
+        file << std::to_string(day) << "," << world->getCreaturesCount() << std::endl;
+        file.close();
     }
     return 0;
 }

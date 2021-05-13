@@ -9,19 +9,20 @@
 #include <cmath>
 #include <iostream>
 
-float Creature::getCollectedFood() const {
-    return collectedFood;
+double Creature::getCollectedFood() {
+    return this->collectedFood;
 }
 
 void Creature::stepMove(World &world1) {
     double speed = 1.; // max displacement every increment
     double e = this->eatingRange;
-    double noise = (-45 + ((float) rand() / RAND_MAX) * 90);
+    double noise = (-45 + ((double) rand() / RAND_MAX) * 90);
     if (Creature::isHasTarget()) {
         if (fabs(Creature::position.getX() - Creature::target.getPosition().getX()) < e &&
             fabs(Creature::position.getY() - Creature::target.getPosition().getY()) < e) {
-            Creature::clearTarget();
             world1.getFoodItems()[this->target.getIndex()].setEaten(true);
+            this->setCollectedFood((this->getCollectedFood() + this->target.getFoodQuantity()));
+            this->clearTarget();
         } else {
             double dx = Creature::target.getPosition().getX() - Creature::getX();
             double dy = Creature::target.getPosition().getY() - Creature::getY();
@@ -53,7 +54,7 @@ void Creature::stepMove(World &world1) {
 }
 
 
-void Creature::setCollectedFood(float collectedFoodArg) {
+void Creature::setCollectedFood(double collectedFoodArg) {
     Creature::collectedFood = collectedFoodArg;
 }
 
