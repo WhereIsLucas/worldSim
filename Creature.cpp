@@ -29,16 +29,16 @@ void Creature::stepMove(World &world1) {
             Creature::angle = targetAngle + noise / 3.;
         }
     }
-    if (fabs(Creature::getX()) >= 50. || fabs(Creature::getY()) >= 50.) {
-        if (Creature::getX() >= 50.) {
-            Creature::position.setX(50);
-        } else if (Creature::getX() <= -50.) {
-            Creature::position.setX(-50.);
+    if (fabs(Creature::getX()) >= world1.getX()/2. || fabs(Creature::getY()) >= world1.getY()/2.) {
+        if (Creature::getX() >= world1.getX()/2.) {
+            Creature::position.setX(world1.getX()/2.);
+        } else if (Creature::getX() <= -world1.getX()/2.) {
+            Creature::position.setX(-world1.getX()/2.);
         }
-        if (Creature::getY() >= 50.) {
-            Creature::position.setY(50);
-        } else if (Creature::getY() <= -50.) {
-            Creature::position.setY(-50.);
+        if (Creature::getY() >= world1.getY()/2.) {
+            Creature::position.setY(world1.getY()/2.);
+        } else if (Creature::getY() <= -world1.getY()/2.) {
+            Creature::position.setY(-world1.getY()/2.);
         }
         Creature::angle = Creature::angle + 180.;
     } else {
