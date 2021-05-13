@@ -9,9 +9,8 @@
 int main() {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(0, 3);
 
-    int maxDays = 1000;
+    int maxDays = 5;
     int startingCreatures = 4;
     int stepPerDay = 100;
 
@@ -41,6 +40,7 @@ int main() {
     fileName = "results/creatureCount.txt";
     remove(fileName.c_str());
 
+    std::uniform_int_distribution<> dis(0, 3);
     //We start the world and place creatures on the sides
     for (int i = 0; i < startingCreatures; ++i) {
         int location = dis(gen);

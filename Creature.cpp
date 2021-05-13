@@ -10,6 +10,9 @@
 #include <random>
 #include <iostream>
 
+std::random_device rd;
+std::mt19937 gen(rd());
+
 double Creature::getCollectedFood() {
     return this->collectedFood;
 }
@@ -156,9 +159,7 @@ void Creature::decrementEnergy(double energyDecrement) {
 }
 
 void Creature::putOnSide(int direction, World &world1){
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dis(-.5, .5);
+    std::uniform_real_distribution<> dis(-1., 1.);
     double newAngle = 0.;
     Vector2 newPosition(0,0);
     switch (direction) {
