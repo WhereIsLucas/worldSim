@@ -9,7 +9,7 @@
 int main() {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dis(-.5, .5);
+    std::uniform_int_distribution<> dis(0, 3);
 
     int maxDays = 100;
     int startingCreatures = 4;
@@ -41,12 +41,10 @@ int main() {
     fileName = "results/creatureCount.txt";
     remove(fileName.c_str());
 
-    //We start the world and place creatures randomly
+    //We start the world and place creatures on the sides
     for (int i = 0; i < startingCreatures; ++i) {
-        auto position = Vector2(world->getX() * dis(gen),
-                                world->getY() * dis(gen));
-        auto creature = new Creature(position);
-        world->addCreature(*creature);
+        int location = dis(gen) ;
+        world->putCreaturesOnSide(location);
     }
 
     //linked cells
@@ -149,11 +147,12 @@ int main() {
 
         for (int i = 0; i < world->getCreaturesCount(); ++i) {
             if (world->getCreature(i)->getCollectedFood() > 0.) {
+                int location = dis(gen);
+                world->removeCreature(i);
+                world->putCreaturesOnSide(location);
                 if (world->getCreature(i)->getCollectedFood() > 2.) {
-                    auto position = Vector2((world->getX() * dis(gen)),
-                                            world->getY() * dis(gen));
-                    auto creature = new Creature(position);
-                    world->addCreature(*creature);
+                    location = dis(gen);
+                    world->putCreaturesOnSide(location);
                 }
             } else {
                 world->removeCreature(i);

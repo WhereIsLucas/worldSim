@@ -66,6 +66,10 @@ Creature::Creature(Vector2 &position) {
     this->angle = 45.;
 }
 
+void Creature::setAngle(double angle) {
+    Creature::angle = angle;
+}
+
 Vector2 &Creature::getPosition() {
     return position;
 }

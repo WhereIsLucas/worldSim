@@ -66,6 +66,8 @@ public:
     void searchForFood(World &world);
 
     void refreshTarget(World &world);
+
+    void setAngle(double angle);
 };
 
 
