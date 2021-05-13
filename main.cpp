@@ -16,6 +16,14 @@ int main() {
 
     double worldXWidth = 200.;
     double worldYWidth = 200.;
+    std::string fileName = "results/world.txt";
+    remove(fileName.c_str());
+
+    std::ofstream file;
+    file.open(fileName.c_str(), std::ios::app);
+    file.precision(10);
+    file << worldXWidth << "," << worldYWidth << std::endl;
+    file.close();
 
     //Maybe we should work with food density
     double foodDensity = 0.00375;
@@ -29,7 +37,7 @@ int main() {
     auto foodPrinter = new FoodPrinter("results/food/");
     creaturesPrinter->clearPrints(10000);
     foodPrinter->clearPrints(10000);
-    std::string fileName = "results/creatureCount.txt";
+    fileName = "results/creatureCount.txt";
     remove(fileName.c_str());
 
     //We start the world and place creatures randomly
@@ -161,5 +169,7 @@ int main() {
         file << std::to_string(day) << "," << world->getCreaturesCount() << std::endl;
         file.close();
     }
+
+
     return 0;
 }

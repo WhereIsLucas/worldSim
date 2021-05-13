@@ -19,8 +19,7 @@ fig = plt.figure(figsize=(7, 7))
 # this counts the number of frames
 path = "./cmake-build-debug/results/creatures/"
 num_files = len([f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))])
-print(num_files)
-totalFrames = num_files - 1
+totalFrames = min(num_files - 1, 1500)
 for i in range(0, totalFrames):
     fileName = path + "creature" + str(i) + ".txt"
     creaturesData.insert(i, np.genfromtxt(fileName,
@@ -44,15 +43,19 @@ showingFrame = 0
 foodScatGraph = plt.scatter(foodData[showingFrame]["x"], foodData[showingFrame]['y'], marker='*', alpha=0.5, s=20,
                             c='blue', label='Food')
 
-plt.title('Scatter plot test')
+plt.title('World Simulation')
 plt.legend()
 # plt.gca().set_aspect('equal', adjustable='box')
 plt.axis("equal")
 
-plt.xlim(-55, 55)
-plt.ylim(-55, 55)
-# plt.xlabel('x')
-# plt.ylabel('y')
+#import the world parameters
+world = np.genfromtxt('./cmake-build-debug/results/world.txt',
+              delimiter=',',
+              dtype=types,
+              names=['x', 'y'])
+
+plt.xlim(-world['x']*0.55, world['x']*0.55)
+plt.ylim(-world['y']*0.55, world['y']*0.55)
 
 plt.savefig('exports/test.png')
 

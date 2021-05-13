@@ -18,7 +18,7 @@ unsigned long World::getCreaturesCount() {
     return World::creatures.size();
 }
 
-Creature * World::getCreature(int index) {
+Creature *World::getCreature(int index) {
     return &World::creatures[index];
 }
 
@@ -31,17 +31,19 @@ double World::getY() const {
 }
 
 void World::prepareFood(int foodQuantity) {
+
     for (int i = 0; i < foodQuantity; ++i) {
-        auto position = Vector2((-World::getX()/2. + ((float) rand()/RAND_MAX) * World::getX()), (-World::getY()/2. + ((float) rand()/RAND_MAX) * World::getY()));
+        auto position = Vector2((-World::getX() / 2. + ((float) rand() / RAND_MAX) * World::getX()),
+                                (-World::getY() / 2. + ((float) rand() / RAND_MAX) * World::getY()));
 //        position.setComponents(0.,-30.);
         auto foodItem = new FoodPlant(position);
         foodItem->setIndex(i);
-        World::addFoodItem(*foodItem,i);
+        World::addFoodItem(*foodItem, i);
     }
 
 }
 
-void World::clearFood(){
+void World::clearFood() {
     World::foodItems.clear();
 }
 
@@ -70,7 +72,7 @@ void World::setY(double y) {
     World::y = y;
 }
 
-void World::addFoodItem(FoodPlant foodItem,int index) {
+void World::addFoodItem(FoodPlant foodItem, int index) {
     World::foodItems.push_back(foodItem);
 }
 
