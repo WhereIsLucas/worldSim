@@ -10,7 +10,7 @@ int main() {
     std::random_device rd;
     std::mt19937 gen(rd());
 
-    int maxDays = 5;
+    int maxDays = 100;
     int startingCreatures = 4;
     int stepPerDay = 100;
 

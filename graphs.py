@@ -3,15 +3,17 @@ import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 
 import numpy as np
-from plyer import notification
+#from plyer import notification
 
 def plotting_fig(x,y, label):
     creatureScatGraph = plt.plot(x, y, label=label)
     showingFrame = 0
     plt.ylim(bottom=0)
     plt.title('Creatures')
-    plt.legend()
-    plt.savefig('exports/'+label+'_graphs.png')
+    #plt.legend()
+    plt.xlabel('days')
+    plt.ylabel(label)
+    plt.savefig('exports/'+label+'_graph.png')
     plt.clf()
 
     
@@ -33,21 +35,16 @@ creaturesData = np.genfromtxt(path,
 
 plotting_fig(creaturesData['x'],creaturesData['y'], 'Population')
 plotting_fig(creaturesData['x'],creaturesData['meanSpeed'], 'MeanSpeed')
-plotting_fig(creaturesData['x'],creaturesData['energy'], 'Energy')
+plotting_fig(creaturesData['x'],creaturesData['energy']/creaturesData['y'], 'TotalEnergy')
 
 # plt.gca().set_aspect('equal', adjustable='box')
-
-
-
-# plt.xlabel('x')
-# plt.ylabel('y')
 
 
 title = 'worldSim'
 message = 'Graph is ready'
 
-notification.notify(title=title,
-                    message=message,
-                    app_icon=None,
-                    timeout=10,
-                    toast=False)
+#notification.notify(title=title,
+#                    message=message,
+#                    app_icon=None,
+#                    timeout=10,
+#                    toast=False)
