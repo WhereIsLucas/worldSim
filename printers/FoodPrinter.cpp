@@ -4,13 +4,14 @@
 #include "FoodPrinter.h"
 
 void FoodPrinter::print(World *world, int frameNumber) const {
-    std::string fileName = FoodPrinter::getPath()+"food" + std::to_string(frameNumber) + ".txt";
+    std::string fileName = FoodPrinter::getPath() + "food" + std::to_string(frameNumber) + ".txt";
     std::ofstream file;
     file.open(fileName.c_str(), std::ios::app);
     file.precision(10);
-    for (int i = 0; i < world->getFoodItems().size(); ++i) {
-        auto foodItem = world->getFoodItems()[i];
-        file << foodItem.getX() << "," << foodItem.getY() << std::endl;
+    if (!world->getFoodItems().empty()){
+        for (auto foodItem : world->getFoodItems()) {
+            file << foodItem.getX() << "," << foodItem.getY() << std::endl;
+        }
     }
     file.close();
 }
@@ -24,10 +25,16 @@ void FoodPrinter::setPath(const std::string path) {
 }
 
 void FoodPrinter::clearPrint(int frameNumber) {
-    std::string fileName = FoodPrinter::getPath()+"food" + std::to_string(frameNumber) + ".txt";
+    std::string fileName = FoodPrinter::getPath() + "food" + std::to_string(frameNumber) + ".txt";
     remove(fileName.c_str());
 }
 
 FoodPrinter::FoodPrinter(const std::string &path) : path(path) {
     FoodPrinter::path = path;
+}
+
+void FoodPrinter::clearPrints(int quantity) {
+    for (int i = 0; i < quantity; ++i) {
+        FoodPrinter::clearPrint(i);
+    }
 }

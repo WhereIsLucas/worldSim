@@ -1,8 +1,9 @@
 import os.path
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
+
 import numpy as np
-import desktop_notify
+from plyer import notification
 
 types = ['float', 'float']
 domainTypes = ['float', 'float']
@@ -12,6 +13,7 @@ foodData = []
 # Set up the codec for the video file
 Writer = animation.writers['ffmpeg']
 writer = Writer(fps=25, metadata=dict(artist='Lucas H'), bitrate=1800)
+
 fig = plt.figure(figsize=(7, 7))
 
 # this counts the number of frames
@@ -60,12 +62,15 @@ def update(frame_number):
     foodScatGraph.set_offsets(np.c_[foodData[frame_number]["x"], foodData[frame_number]["y"]])
 
 
-async def end_function():
-    notify = desktop_notify.aio.Notify('Finished', 'Finished')
-    await notify.show()
-
-
 animation = animation.FuncAnimation(fig, update, interval=40, frames=totalFrames)
 # plt.show()
 animation.save('exports/im.mp4', writer=writer)
-end_function()
+
+title = 'worldSim'
+message = 'Video is ready'
+
+notification.notify(title=title,
+                    message=message,
+                    app_icon=None,
+                    timeout=10,
+                    toast=False)

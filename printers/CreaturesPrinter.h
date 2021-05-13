@@ -21,6 +21,8 @@ public:
     void clearPrint(int day);
 
     void printNull(int frameNumber) const;
+
+    void clearPrints(int quantity);
 };
 
 

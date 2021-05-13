@@ -18,6 +18,8 @@ public:
 
     void print(World *world, int day) const;
     void clearPrint(int day);
+
+    void clearPrints(int quantity);
 };
 
 

@@ -8,29 +8,26 @@
 int main() {
     srand((unsigned) time(0));
 
-    int maxDays = 10;
+    int maxDays = 2;
     int startingCreatures = 1;
-    int foodPerDay = 2;
+    int foodPerDay = 1;
     int stepPerDay = 100;
-    double worldXWidth = 100;
-    double worldYWidth = 100;
+    double worldXWidth = 100.;
+    double worldYWidth = 100.;
     auto world = new World(worldXWidth, worldYWidth);
-    //We prepare the printers
+
+    //We prepare the printers & clear the old files
     auto creaturesPrinter = new CreaturesPrinter("results/creatures/");
+    creaturesPrinter->clearPrints(maxDays * stepPerDay);
     auto foodPrinter = new FoodPrinter("results/food/");
-    //We clear the old files
-    for (int l = 0; l <= maxDays * stepPerDay; l++) {
-        creaturesPrinter->clearPrint(l);
-    }
-    for (int l = 0; l <= maxDays * stepPerDay; l++) {
-        foodPrinter->clearPrint(l);
-    }
+    foodPrinter->clearPrints(maxDays * stepPerDay);
+
     //We start the world and place creatures randomly
     for (int i = 0; i < startingCreatures; ++i) {
-        auto position = Vector2((-50 + ((float) rand() / RAND_MAX) * world->getX()),
-                                (-50 + ((float) rand() / RAND_MAX) * world->getY()));
+        auto position = Vector2(((- world->getX() / 2.) + ((float) rand() / RAND_MAX) * world->getX()),
+                                ((- world->getY() / 2.) + ((float) rand() / RAND_MAX) * world->getY()));
+        position.setComponents(0,0);
         auto creature = new Creature(position);
-
         world->addCreature(*creature);
     }
 
@@ -87,8 +84,8 @@ int main() {
         world->clearFood();
         world->prepareFood(foodPerDay);
         for (int i = 0; i < world->getCreaturesCount(); ++i) {
-            world->getCreature(i)->setCollectedFood(0);
-            world->getCreature(i)->setHasTarget(false);
+            world->getCreature(i)->setCollectedFood(0.);
+            world->getCreature(i)->clearTarget();
         }
         for (int j = 0; j < stepPerDay; ++j) {
 
@@ -99,10 +96,14 @@ int main() {
 
             for (int k = 0; k < world->getCreaturesCount(); ++k) {
                 auto creature = world->getCreature(k);
+//                if (creature->hasTarget()){
+//                    creature->refreshTarget(*world);
+//                }
                 if (!creature->isHasTarget()){
                     creature->searchForFood(*world);
                 }
                 creature->stepMove(*world);
+
                 int cellIndex = (int) (creature->getX() / cellSize) +
                                 (((int) (creature->getY() / cellSize)) * nCellX);
                 if (std::abs(cellIndex) > nCell - 1) {
@@ -121,8 +122,8 @@ int main() {
                 cells[cellIndex].setHeadOfList(i);
             }
             if (world->getCreaturesCount()) {
-                for (int i = 0; i < world->getCreaturesCount(); ++i) {
-                    creaturesPrinter->print(world->getCreature(i), day * stepPerDay + j);
+                for (int k = 0; k < world->getCreaturesCount(); ++k) {
+                    creaturesPrinter->print(world->getCreature(k), day * stepPerDay + j);
                 }
             } else {
                 creaturesPrinter->printNull(day * stepPerDay + j);

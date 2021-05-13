@@ -8,8 +8,6 @@
 World::World(double x, double y) : x(x), y(y) {
     World::x = x;
     World::y = y;
-//    std::vector<std::vector<double>> food2(x, std::vector<double>(y,0.));
-//    World::food = food2;
 }
 
 void World::addCreature(Creature creature) {
@@ -35,21 +33,32 @@ double World::getY() const {
 void World::prepareFood(int foodQuantity) {
     for (int i = 0; i < foodQuantity; ++i) {
         auto position = Vector2((-50 + ((float) rand()/RAND_MAX) * World::getX()), (-50 + ((float) rand()/RAND_MAX) * World::getY()));
-        auto foodItem = new FoodItem(position);
-        World::addFoodItem(*foodItem);
+//        position.setComponents(0.,-30.);
+        auto foodItem = new FoodPlant(position);
+        foodItem->setIndex(i);
+        World::addFoodItem(*foodItem,i);
     }
+
 }
 
 void World::clearFood(){
     World::foodItems.clear();
 }
 
-const std::vector<FoodItem> &World::getFoodItems() const {
+std::vector<FoodPlant> &World::getFoodItems() {
     return foodItems;
 }
 
 void World::removeCreature(int index) {
     World::creatures.erase(World::creatures.begin() + index);
+}
+
+void World::removeFoodItem(int index) {
+//    World::foodItems.erase(World::foodItems.begin() + index);
+//    for (int i = 0; i < World::getFoodItems().size(); ++i) {
+//        auto item = World::getFoodItems()[i];
+//        item.setIndex(i);
+//    }
 }
 
 
@@ -61,8 +70,8 @@ void World::setY(double y) {
     World::y = y;
 }
 
-void World::addFoodItem(FoodItem foodItem) {
-    World::foodItems.push_back(foodItem);
+void World::addFoodItem(FoodPlant foodItem,int index) {
+    World::foodItems.insert(World::foodItems.begin() + index,foodItem);
 }
 
 

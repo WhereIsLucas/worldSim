@@ -8,7 +8,9 @@
 class World;
 
 #include "World.h"
+#include "food/FoodPlant.h"
 #include "utilities/Vector2.h"
+#include <optional>
 
 class Creature {
 public:
@@ -18,27 +20,30 @@ public:
 
     void stepMove(World &world1);
 
-    const Vector2 &getPosition() const;
-    const Vector2 &getTarget() const;
+    Vector2 &getPosition();
 
-    const Vector2 &getVelocity() const;
+    Eatable &getTarget();
+
+    Vector2 &getVelocity();
 
 private:
     Vector2 position;
     Vector2 velocity;
-    Vector2 target;
+    Eatable target;
 public:
-    void setTarget(const Vector2 &target);
+    void setTarget(Eatable target);
+
+    void clearTarget();
 
 private:
+    float collectedFood = 0.;
     bool hasTarget = false;
 public:
     bool isHasTarget() const;
 
-    void setHasTarget(bool hasTargetBool);
+    void setHasTarget(bool hasTarget);
 
 private:
-    float collectedFood = 0.;
     int linkedCell = -9;
     int linkedCreature = -9;
     double angle;
@@ -49,13 +54,16 @@ public:
     void setCollectedFood(float collectedFoodArg);
 
     double getX();
+
     double getY();
 
     void setLinkedCell(int i);
 
     void setLinkedCreature(int creatureIndex);
 
-    void searchForFood(const World& world);
+    void searchForFood(World &world);
+
+    void refreshTarget(World world);
 };
 
 

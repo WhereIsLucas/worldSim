@@ -15,33 +15,34 @@ float Creature::getCollectedFood() const {
 
 void Creature::stepMove(World &world1) {
     double speed = 1.; // max displacement every increment
-    double e = 0.05;
+    double e = Creature::eatingRange;
     double noise = (-45 + ((float) rand() / RAND_MAX) * 90);
-    if (Creature::hasTarget) {
-        if (Creature::position.getX() - Creature::target.getX() < e &&
-            Creature::position.getY() - Creature::target.getY() < e) {
-            Creature::setHasTarget(false);
-        }else{
-            double dx = Creature::target.getX() - Creature::getX();
-            double dy = Creature::target.getY() - Creature::getY();
-            double targetAngle = atan2(-dx, -dy) * (180 / M_PI);
-            Creature::angle = (targetAngle + Creature::angle) / 2.;
+    if (Creature::isHasTarget()) {
+        if (fabs(Creature::position.getX() - Creature::target.getPosition().getX()) < e &&
+            fabs(Creature::position.getY() - Creature::target.getPosition().getY()) < e) {
+            Creature::clearTarget();
+            world1.clearFood(); //this is temporary
+        } else {
+            double dx = Creature::target.getPosition().getX() - Creature::getX();
+            double dy = Creature::target.getPosition().getY() - Creature::getY();
+            double targetAngle = atan2(-dx, dy) * (180 / M_PI) + 90;
+            Creature::angle = targetAngle + noise / 3.;
         }
     }
     if (fabs(Creature::getX()) >= 50. || fabs(Creature::getY()) >= 50.) {
         if (Creature::getX() >= 50.) {
             Creature::position.setX(50);
-        }else if (Creature::getX() <= -50.) {
+        } else if (Creature::getX() <= -50.) {
             Creature::position.setX(-50.);
         }
         if (Creature::getY() >= 50.) {
             Creature::position.setY(50);
-        }else if (Creature::getY() <= -50.) {
+        } else if (Creature::getY() <= -50.) {
             Creature::position.setY(-50.);
         }
-        Creature::angle = Creature::angle + 180. + noise;
-    }else {
-        if(!Creature::hasTarget){ // Trying to remove the ping-pong against boundaries (but failing)
+        Creature::angle = Creature::angle + 180.;
+    } else {
+        if (!Creature::isHasTarget()) { // Trying to remove the ping-pong against boundaries (but failing)
             Creature::angle = Creature::angle + noise; // in degrees
         }
     }
@@ -62,15 +63,15 @@ Creature::Creature(Vector2 &position) {
     Creature::angle = 45.;
 }
 
-const Vector2 &Creature::getPosition() const {
+Vector2 &Creature::getPosition() {
     return position;
 }
 
-const Vector2 &Creature::getVelocity() const {
+Vector2 &Creature::getVelocity() {
     return velocity;
 }
 
-const Vector2 &Creature::getTarget() const {
+Eatable &Creature::getTarget() {
     return Creature::target;
 }
 
@@ -91,26 +92,34 @@ void Creature::setLinkedCreature(int creatureIndex) {
     Creature::linkedCreature = creatureIndex;
 }
 
-bool Creature::isHasTarget() const {
-    return hasTarget;
+void Creature::setTarget(Eatable eatableTarget) {
+    Creature::target = eatableTarget;
 }
 
-void Creature::setHasTarget(bool hasTargetBool) {
-    Creature::hasTarget = hasTargetBool;
-}
-
-void Creature::setTarget(const Vector2 &targetVector) {
-    Creature::target = targetVector;
-}
-
-void Creature::searchForFood(const World &world) {
+void Creature::searchForFood(World &world) {
     double min_distance = 1000000000000.;
     for (auto foodItem : world.getFoodItems()) {
         double distance = getDistanceBetweenVectors(Creature::getPosition(), foodItem.getPosition());
         if (distance < min_distance) {
             min_distance = distance;
+            Creature::setTarget(foodItem);
             Creature::setHasTarget(true);
-            Creature::setTarget(foodItem.getPosition());
         }
     }
+}
+
+void Creature::clearTarget() {
+    Creature::setHasTarget(false);
+}
+
+void Creature::refreshTarget(World world) {
+    //CHECK IF TARGET STILL IN FOOD
+}
+
+bool Creature::isHasTarget() const {
+    return hasTarget;
+}
+
+void Creature::setHasTarget(bool hasTarget) {
+    Creature::hasTarget = hasTarget;
 }

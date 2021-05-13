@@ -35,3 +35,9 @@ void CreaturesPrinter::clearPrint(int frameNumber) {
 CreaturesPrinter::CreaturesPrinter(const std::string &path) : path(path) {
     CreaturesPrinter::path = path;
 }
+
+void CreaturesPrinter::clearPrints(int quantity) {
+    for (int i = 0; i < quantity; ++i) {
+        CreaturesPrinter::clearPrint(i);
+    }
+}
