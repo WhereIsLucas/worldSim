@@ -3,14 +3,20 @@
 
 #include "CreaturesPrinter.h"
 
-void CreaturesPrinter::print(Creature *creature, int frameNumber) const {
-    std::string fileName = CreaturesPrinter::getPath()+"creature" + std::to_string(frameNumber) + ".txt";
+void CreaturesPrinter::print(Creature *creature, int frameNumber, const std::string& filename, bool noMorePred) const {
+    std::string fileName = CreaturesPrinter::getPath()+filename+ std::to_string(frameNumber) + ".txt";
     std::ofstream file;
     file.open(fileName.c_str(), std::ios::app);
     file.precision(10);
-    file << creature->getX() << "," << creature->getY() << "," << creature->getEnergy() + creature->getCollectedFood() << std::endl;
-    file.close();
+    if(noMorePred){ // If there are no more predators
+        file.close();
+    }else {
+        file << creature->getX() << "," << creature->getY() << "," << creature->getEnergy() + creature->getCollectedFood() << std::endl;
+        file.close();
+    }
+
 }
+
 
 void CreaturesPrinter::printNull(int frameNumber) const {
     std::string fileName = CreaturesPrinter::getPath()+"creature" + std::to_string(frameNumber) + ".txt";

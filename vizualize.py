@@ -3,11 +3,12 @@ import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 
 import numpy as np
-from plyer import notification
+#from plyer import notification
 
 types = ['float', 'float']
 domainTypes = ['float', 'float']
-creaturesData = []
+preysData = []
+predatorsData = []
 foodData = []
 
 # Set up the codec for the video file
@@ -21,15 +22,24 @@ path = "./cmake-build-debug/results/creatures/"
 num_files = len([f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))])
 totalFrames = min(num_files - 1, 1500)
 for i in range(0, totalFrames):
-    fileName = path + "creature" + str(i) + ".txt"
-    creaturesData.insert(i, np.genfromtxt(fileName,
+    fileName = path + "prey" + str(i) + ".txt"
+    preysData.insert(i, np.genfromtxt(fileName,
+                                      delimiter=',',
+                                      dtype=types,
+                                      names=['x', 'y']))
+    fileName = path + "predator" + str(i) + ".txt"
+    predatorsData.insert(i, np.genfromtxt(fileName,
                                           delimiter=',',
                                           dtype=types,
-                                          names=['x', 'y']))
+                                          names=['x','y']))
+    
 showingFrame = 0
-creatureScatGraph = plt.scatter(creaturesData[showingFrame]["x"], creaturesData[showingFrame]['y'], alpha=0.5, s=20,
-                                c='red', label='creature')
-# red are creatures
+preysScatGraph = plt.scatter(preysData[showingFrame]["x"], preysData[showingFrame]['y'], alpha=0.5, s=20,
+                             c='red', label='prey')
+predatorsScatGraph = plt.scatter(predatorsData[showingFrame]["x"], predatorsData[showingFrame]['y'], alpha=0.5, s=20, 
+                                 c='magenta', label='predator')
+# red are preys
+# magenta are predators
 # blue is food
 
 path2 = "./cmake-build-debug/results/food/"
@@ -61,7 +71,8 @@ plt.savefig('exports/test.png')
 
 
 def update(frame_number):
-    creatureScatGraph.set_offsets(np.c_[creaturesData[frame_number]["x"], creaturesData[frame_number]["y"]])
+    preysScatGraph.set_offsets(np.c_[preysData[frame_number]["x"], preysData[frame_number]["y"]])
+    predatorsScatGraph.set_offsets(np.c_[predatorsData[frame_number]["x"], predatorsData[frame_number]["y"]])
     foodScatGraph.set_offsets(np.c_[foodData[frame_number]["x"], foodData[frame_number]["y"]])
 
 
@@ -72,8 +83,8 @@ animation.save('exports/im.mp4', writer=writer)
 title = 'worldSim'
 message = 'Video is ready'
 
-notification.notify(title=title,
-                    message=message,
-                    app_icon=None,
-                    timeout=10,
-                    toast=False)
+#notification.notify(title=title,
+#                   message=message,
+#                   app_icon=None,
+#                   timeout=10,
+#                   toast=False)

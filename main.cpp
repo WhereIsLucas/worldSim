@@ -11,7 +11,7 @@ int main() {
     std::mt19937 gen(rd());
 
     int maxDays = 5;
-    int startingCreatures = 4;
+    int startingCreatures = 5;
     int stepPerDay = 100;
 
     double worldXWidth = 200.;
@@ -69,6 +69,7 @@ int main() {
             int location = dis(gen);
             creature->putOnSide(location, *world);
         }
+        int nbOfFilesPred;
         for (int j = 0; j < stepPerDay; ++j) { //Day loop
             for (int k = 0; k < world->getCreaturesCount(); ++k) {
                 auto creature = world->getCreature(k);
@@ -79,9 +80,19 @@ int main() {
                     creature->searchForFood(*world);
                 }
                 creature->stepMove(*world);
-                creaturesPrinter->print(creature, day * stepPerDay + j);
+                if(creature->isPredator()){ // Printing in different files for different colours
+                    creaturesPrinter->print(creature, day * stepPerDay + j, "predator", false);
+                    nbOfFilesPred = day * stepPerDay + j;
+                } else{
+                    creaturesPrinter->print(creature, day * stepPerDay + j, "prey", false);
+                }
             }
             foodPrinter->print(world, day * stepPerDay + j);
+        }
+        if((day * stepPerDay + 100 - 1) - nbOfFilesPred > 0){ // if there are no more predators
+            for (int j = nbOfFilesPred+1; j < day * stepPerDay + 100; ++j) {
+                creaturesPrinter->print(world->getCreature(1), j, "predator", true);
+            }
         }
 
 

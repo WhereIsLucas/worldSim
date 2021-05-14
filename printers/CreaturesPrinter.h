@@ -17,7 +17,7 @@ public:
     const std::string &getPath() const;
     void setPath(std::string path);
 
-    void print(Creature *creature, int day) const;
+    void print(Creature *creature, int day, const std::string& filename, bool noMorePred) const;
     void clearPrint(int day);
 
     void printNull(int frameNumber) const;
