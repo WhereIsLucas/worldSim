@@ -10,7 +10,7 @@ int main() {
     std::random_device rd;
     std::mt19937 gen(rd());
 
-    int maxDays = 100;
+    int maxDays = 5;
     int startingCreatures = 4;
     int stepPerDay = 100;
 
@@ -45,7 +45,11 @@ int main() {
     for (int i = 0; i < startingCreatures; ++i) {
         int location = dis(gen);
         auto position = Vector2(0, 0);
-        auto newCreature = new Creature(position);
+        bool predator = false;
+        if(i == startingCreatures-1){
+            predator = true; // adding one predator
+        }
+        auto newCreature = new Creature(position, predator);
         newCreature->putOnSide(location, *world);
         world->addCreature(*newCreature);
     }
@@ -99,11 +103,15 @@ int main() {
                 if (energyBalance > 2.) {
                     int location = dis(gen);
                     auto position = Vector2(0, 0);
-                    auto newCreature = new Creature(position);
+                    bool predator = false;
+                    if(creature->isPredator()){ // Reproduction of the predator
+                        predator = true;
+                    }
+                    auto newCreature = new Creature(position,predator);
                     newCreature->putOnSide(location, *world);
-                    double parentSpeed = creature->getSpeed();
-                    double noise = noiseDis(gen);
-                    newCreature->setSpeed(parentSpeed * (1. + noise)); //Speed mutation
+//                    double parentSpeed = creature->getSpeed();
+//                    double noise = noiseDis(gen);
+//                    newCreature->setSpeed(parentSpeed * (1. + noise)); //Speed mutation
                     world->addCreature(*newCreature);
                 }
             } else {

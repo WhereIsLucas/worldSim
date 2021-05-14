@@ -64,14 +64,19 @@ void Creature::setCollectedFood(double collectedFoodArg) {
     this->collectedFood = collectedFoodArg;
 }
 
-Creature::Creature(Vector2 &position) {
+Creature::Creature(Vector2 &position, bool &predator) {
     this->position = position;
     this->velocity = Vector2(0, 0);
     this->angle = 45.;
+    this->predator = predator;
 }
 
-void Creature::setAngle(double angle) {
-    Creature::angle = angle;
+bool Creature::isPredator() const {
+    return predator;
+}
+
+void Creature::setAngle(double newAngle) {
+    Creature::angle = newAngle;
 }
 
 Vector2 &Creature::getPosition() {

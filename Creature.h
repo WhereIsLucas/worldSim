@@ -26,9 +26,10 @@ private:
     double energy = 0.;
     double collectedFood = 0.;
     bool hasTarget = false;
+    bool predator; // If true --> predator
 
 public:
-    Creature(Vector2 &position);
+    Creature(Vector2 &position, bool &predator);
 
     void setTarget(Eatable target);
 
@@ -70,13 +71,15 @@ public:
 
     void decrementEnergy(double energyDecrement);
 
-    void setAngle(double angle);
+    void setAngle(double newAngle);
 
     void putOnSide(int direction, World &world1);
 
     double getSpeed() const;
 
     void setSpeed(double speed);
+
+    bool isPredator() const;
 };
 
 
