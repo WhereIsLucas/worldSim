@@ -35,12 +35,12 @@ void Creature::stepMove(World &world1) {
             }
         }else{
             int i = this->target_index;
-            if (fabs(this->getX() - world1.getCreature(i)->getX()) < this->eatingRange &&
-                fabs(this->getY() - world1.getCreature(i)->getY()) < this->eatingRange) {
-                this->setCollectPrey(1);
+            if (fabs(this->getX() - world1.getCreature(i)->getX()) < this->eatingRangePred &&
+                fabs(this->getY() - world1.getCreature(i)->getY()) < this->eatingRangePred) { // TODO change eatingRange for predators
+                this->setCollectPrey(1); // One prey is caught by the predator
                 this->setCollectedFood((this->getCollectedFood() + this->collectPrey));
                 this->clearTarget();
-                world1.removeCreature(i); // the prey is eaten
+                world1.removeCreature(i); // the prey is eaten and so removed
                 this->target_index = 999; // To know that the prey has been eaten
             } else {
                 double dx = world1.getCreature(i)->getX() - this->getX();
@@ -150,7 +150,7 @@ void Creature::searchForFood(World &world) {
                 if(distance < min_distance && distance < this->sensingRange){ // TODO modify the sensing range for predators
                     min_distance = distance;
                     this->setHasTarget(true);
-                    this->target_index = i;
+                    this->target_index = i; // storing the index of the prey targeted by the predator
                 }
             }
         }

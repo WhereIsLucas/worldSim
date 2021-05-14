@@ -21,6 +21,7 @@ private:
     int linkedCreature = -9;
     double angle;
     double eatingRange = 0.5; //Creatures can eat food within this range
+    double eatingRangePred = 1.; // Predators can eat preys within this range
     double sensingRange = 15; //Creatures can detect food within this range
     double speed = 1.;
     double energy = 0.;
