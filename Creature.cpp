@@ -21,16 +21,33 @@ void Creature::stepMove(World &world1) {
     std::uniform_real_distribution<> dis(-45., 45.);
     double noise = dis(gen);
     if (this->hasTarget) {
-        if (fabs(this->position.getX() - this->target.getPosition().getX()) < this->eatingRange &&
-            fabs(this->position.getY() - this->target.getPosition().getY()) < this->eatingRange) {
-            world1.getFoodItems()[this->target.getIndex()].setEaten(true);
-            this->setCollectedFood((this->getCollectedFood() + this->target.getFoodQuantity()));
-            this->clearTarget();
-        } else {
-            double dx = this->target.getPosition().getX() - this->getX();
-            double dy = this->target.getPosition().getY() - this->getY();
-            double targetAngle = atan2(-dx, dy) * (180 / M_PI) + 90;
-            Creature::angle = targetAngle + noise / 3.;
+        if(!this->isPredator()) {
+            if (fabs(this->position.getX() - this->target.getPosition().getX()) < this->eatingRange &&
+                fabs(this->position.getY() - this->target.getPosition().getY()) < this->eatingRange) {
+                world1.getFoodItems()[this->target.getIndex()].setEaten(true);
+                this->setCollectedFood((this->getCollectedFood() + this->target.getFoodQuantity()));
+                this->clearTarget();
+            } else {
+                double dx = this->target.getPosition().getX() - this->getX();
+                double dy = this->target.getPosition().getY() - this->getY();
+                double targetAngle = atan2(-dx, dy) * (180 / M_PI) + 90;
+                Creature::angle = targetAngle + noise / 3.;
+            }
+        }else{
+            int i = this->target_index;
+            if (fabs(this->getX() - world1.getCreature(i)->getX()) < this->eatingRange &&
+                fabs(this->getY() - world1.getCreature(i)->getY()) < this->eatingRange) {
+                this->setCollectPrey(1);
+                this->setCollectedFood((this->getCollectedFood() + this->collectPrey));
+                this->clearTarget();
+                world1.removeCreature(i); // the prey is eaten
+                this->target_index = 999; // To know that the prey has been eaten
+            } else {
+                double dx = world1.getCreature(i)->getX() - this->getX();
+                double dy = world1.getCreature(i)->getY() - this->getY();
+                double targetAngle = atan2(-dx, dy) * (180 / M_PI) + 90;
+                Creature::angle = targetAngle + noise / 3.;
+            }
         }
     }
     if (fabs(this->getX()) >= world1.getX() / 2. || fabs(this->getY()) >= world1.getY() / 2.) { //If close to the borders
@@ -48,7 +65,7 @@ void Creature::stepMove(World &world1) {
         double dy = 0 - this->getY();
         this->angle = atan2(-dx, dy) * (180 / M_PI) + 90; //angle towards the center
     } else {
-        if (!this->isHasTarget()) { // Trying to remove the ping-pong against boundaries (but failing)
+        if (!this->isHasTarget()) {
             this->angle = this->angle + noise; // in degrees
         }
     }
@@ -114,13 +131,27 @@ void Creature::setTarget(Eatable eatableTarget) {
 
 void Creature::searchForFood(World &world) {
     double min_distance = 1000000000000.;
-    for (auto foodItem : world.getFoodItems()) {
-        if (!foodItem.isEaten()) {
-            double distance = getDistanceBetweenVectors(this->getPosition(), foodItem.getPosition());
-            if (distance < min_distance && distance < this->sensingRange) {
-                min_distance = distance;
-                this->setTarget(foodItem);
-                this->setHasTarget(true);
+    if(!this->isPredator()){
+        for (auto foodItem : world.getFoodItems()) {
+            if (!foodItem.isEaten()) {
+                double distance = getDistanceBetweenVectors(this->getPosition(), foodItem.getPosition());
+                if (distance < min_distance && distance < this->sensingRange) {
+                    min_distance = distance;
+                    this->setTarget(foodItem);
+                    this->setHasTarget(true);
+                }
+            }
+        }
+    }else{
+        for (int i = 0; i < world.getCreaturesCount(); ++i) {
+            auto creature = world.getCreature(i);
+            if (!creature->isPredator()){
+                double distance = getDistanceBetweenVectors(this->getPosition(),creature->getPosition());
+                if(distance < min_distance && distance < this->sensingRange){ // TODO modify the sensing range for predators
+                    min_distance = distance;
+                    this->setHasTarget(true);
+                    this->target_index = i;
+                }
             }
         }
     }
@@ -131,8 +162,9 @@ void Creature::clearTarget() {
 }
 
 void Creature::refreshTarget(World &world1) {
-    if (world1.getFoodItems()[this->target.getIndex()].isEaten()) {
+    if (world1.getFoodItems()[this->target.getIndex()].isEaten() || this->target_index == 999) { // target has been eaten
         this->clearTarget();
+        this->target_index = 10000;
         this->searchForFood(world1);
     }
 }
@@ -197,4 +229,15 @@ double Creature::getSpeed() const {
 
 void Creature::setSpeed(double newSpeed) {
     Creature::speed = newSpeed;
+}
+
+//void Creature::setTargetIndex(int targetIndex) {
+//    target_index = targetIndex;
+//}
+//int Creature::getTargetIndex() const {
+//    return target_index;
+//}
+
+void Creature::setCollectPrey(int newCollectPrey) {
+    Creature::collectPrey = newCollectPrey;
 }

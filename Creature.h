@@ -27,6 +27,13 @@ private:
     double collectedFood = 0.;
     bool hasTarget = false;
     bool predator; // If true --> predator
+    int target_index = 10000;
+    int collectPrey = 0.;
+public:
+//    void setTargetIndex(int targetIndex);
+//    int getTargetIndex() const;
+
+    void setCollectPrey(int collectPrey);
 
 public:
     Creature(Vector2 &position, bool &predator);

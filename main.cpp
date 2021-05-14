@@ -63,6 +63,7 @@ int main() {
         for (int i = 0; i < world->getCreaturesCount(); ++i) { //Morning loop
             auto creature = world->getCreature(i);
             creature->setCollectedFood(0.);
+            creature->setCollectPrey(0);
             creature->setEnergy(0.);
             creature->clearTarget();
             int location = dis(gen);

@@ -43,7 +43,6 @@ void World::prepareFood(int foodQuantity) {
         foodItem->setIndex(i);
         World::addFoodItem(*foodItem, i);
     }
-
 }
 
 void World::clearFood() {
@@ -67,12 +66,12 @@ void World::removeFoodItem(int index) {
 }
 
 
-void World::setX(double x) {
-    World::x = x;
+void World::setX(double newX) {
+    World::x = newX;
 }
 
-void World::setY(double y) {
-    World::y = y;
+void World::setY(double newY) {
+    World::y = newY;
 }
 
 void World::addFoodItem(FoodPlant foodItem, int index) {
