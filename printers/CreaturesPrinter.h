@@ -18,11 +18,11 @@ public:
     void setPath(std::string path);
 
     void print(Creature *creature, int day, const std::string& filename, bool noMorePred) const;
-    void clearPrint(int day);
+    void clearPrint(int day, const std::string& filename);
 
     void printNull(int frameNumber) const;
 
-    void clearPrints(int quantity);
+    void clearPrints(int quantity, const std::string& filename);
 };
 
 

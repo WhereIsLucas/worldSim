@@ -9,6 +9,7 @@ void CreaturesPrinter::print(Creature *creature, int frameNumber, const std::str
     file.open(fileName.c_str(), std::ios::app);
     file.precision(10);
     if(noMorePred){ // If there are no more predators
+        file << " , , " << std::endl;
         file.close();
     }else {
         file << creature->getX() << "," << creature->getY() << "," << creature->getEnergy() + creature->getCollectedFood() << std::endl;
@@ -33,8 +34,8 @@ void CreaturesPrinter::setPath(const std::string path) {
     CreaturesPrinter::path = path;
 }
 
-void CreaturesPrinter::clearPrint(int frameNumber) {
-    std::string fileName = CreaturesPrinter::getPath()+"creature" + std::to_string(frameNumber) + ".txt";
+void CreaturesPrinter::clearPrint(int frameNumber, const std::string& filename) {
+    std::string fileName = CreaturesPrinter::getPath()+filename+ std::to_string(frameNumber) + ".txt";
     remove(fileName.c_str());
 }
 
@@ -42,8 +43,8 @@ CreaturesPrinter::CreaturesPrinter(const std::string &path) : path(path) {
     CreaturesPrinter::path = path;
 }
 
-void CreaturesPrinter::clearPrints(int quantity) {
+void CreaturesPrinter::clearPrints(int quantity, const std::string& filename) {
     for (int i = 0; i < quantity; ++i) {
-        CreaturesPrinter::clearPrint(i);
+        CreaturesPrinter::clearPrint(i, filename);
     }
 }

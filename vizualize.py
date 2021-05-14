@@ -18,16 +18,17 @@ writer = Writer(fps=25, metadata=dict(artist='Lucas H'), bitrate=1800)
 fig = plt.figure(figsize=(7, 7))
 
 # this counts the number of frames
-path = "./cmake-build-debug/results/creatures/"
-num_files = len([f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))])
+path1 = "./cmake-build-debug/results/preys/"
+path2 = "./cmake-build-debug/results/predators/"
+num_files = len([f for f in os.listdir(path1) if os.path.isfile(os.path.join(path1, f))])
 totalFrames = min(num_files - 1, 1500)
 for i in range(0, totalFrames):
-    fileName = path + "prey" + str(i) + ".txt"
+    fileName = path1 + "prey" + str(i) + ".txt"
     preysData.insert(i, np.genfromtxt(fileName,
                                       delimiter=',',
                                       dtype=types,
                                       names=['x', 'y']))
-    fileName = path + "predator" + str(i) + ".txt"
+    fileName = path2 + "predator" + str(i) + ".txt"
     predatorsData.insert(i, np.genfromtxt(fileName,
                                           delimiter=',',
                                           dtype=types,
@@ -37,9 +38,9 @@ showingFrame = 0
 preysScatGraph = plt.scatter(preysData[showingFrame]["x"], preysData[showingFrame]['y'], alpha=0.5, s=20,
                              c='red', label='prey')
 predatorsScatGraph = plt.scatter(predatorsData[showingFrame]["x"], predatorsData[showingFrame]['y'], alpha=0.5, s=20, 
-                                 c='magenta', label='predator')
+                                 c='green', label='predator')
 # red are preys
-# magenta are predators
+# green are predators
 # blue is food
 
 path2 = "./cmake-build-debug/results/food/"

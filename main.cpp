@@ -10,8 +10,9 @@ int main() {
     std::random_device rd;
     std::mt19937 gen(rd());
 
-    int maxDays = 5;
-    int startingCreatures = 5;
+    int maxDays = 2;
+    int startingPreys = 6;
+    int startingPredators = 2;
     int stepPerDay = 100;
 
     double worldXWidth = 200.;
@@ -33,21 +34,24 @@ int main() {
     auto world = new World(worldXWidth, worldYWidth);
 
     //We prepare the printers & clear the old files
-    auto creaturesPrinter = new CreaturesPrinter("results/creatures/");
+    auto preysPrinter = new CreaturesPrinter("results/preys/");
+    auto predatorsPrinter = new CreaturesPrinter("results/predators/");
     auto foodPrinter = new FoodPrinter("results/food/");
-    creaturesPrinter->clearPrints(25000);
+    preysPrinter->clearPrints(25000, "prey");
+    predatorsPrinter->clearPrints(25000, "predator");
     foodPrinter->clearPrints(25000);
     fileName = "results/creatureCount.txt";
     remove(fileName.c_str());
 
     std::uniform_int_distribution<> dis(0, 3);
     //We start the world and place creatures on the sides
-    for (int i = 0; i < startingCreatures; ++i) {
+    int startingCreatures = startingPreys + startingPredators ;
+    for (int i = 0; i < (startingCreatures); ++i) {
         int location = dis(gen);
         auto position = Vector2(0, 0);
         bool predator = false;
-        if(i == startingCreatures-1){
-            predator = true; // adding one predator
+        if(i >= startingCreatures - startingPredators){
+            predator = true; // adding predators
         }
         auto newCreature = new Creature(position, predator);
         newCreature->putOnSide(location, *world);
@@ -81,17 +85,17 @@ int main() {
                 }
                 creature->stepMove(*world);
                 if(creature->isPredator()){ // Printing in different files for different colours
-                    creaturesPrinter->print(creature, day * stepPerDay + j, "predator", false);
+                    predatorsPrinter->print(creature, day * stepPerDay + j, "predator", false);
                     nbOfFilesPred = day * stepPerDay + j;
                 } else{
-                    creaturesPrinter->print(creature, day * stepPerDay + j, "prey", false);
+                    preysPrinter->print(creature, day * stepPerDay + j, "prey", false);
                 }
             }
             foodPrinter->print(world, day * stepPerDay + j);
         }
         if((day * stepPerDay + 100 - 1) - nbOfFilesPred > 0){ // if there are no more predators
-            for (int j = nbOfFilesPred+1; j < day * stepPerDay + 100; ++j) {
-                creaturesPrinter->print(world->getCreature(1), j, "predator", true);
+            for (int j = nbOfFilesPred+1; j < day * stepPerDay + stepPerDay; ++j) {
+                predatorsPrinter->print(world->getCreature(1), j, "predator", true);
             }
         }
 
