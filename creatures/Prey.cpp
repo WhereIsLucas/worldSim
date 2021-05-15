@@ -17,10 +17,14 @@ void Prey::stepMove(World &world1) {
 
     this->searchForPredator(world1);
     if(this->getIsHunted()){ // If a predator is close
-        double dx = world1.getCreature(this->hunterIndex)->getX() - this->getX();
-        double dy = world1.getCreature(this->hunterIndex)->getY() - this->getY();
-        double predAngle = atan2(-dx,dy) * (180/M_PI) -90;
-        this->setAngle(predAngle + noise/2.);
+        double predAngle;
+        for (int i : this->hunterIndex) {
+            double dx = world1.getCreature(i)->getX() - this->getX();
+            double dy = world1.getCreature(i)->getY() - this->getY();
+            predAngle += atan2(-dx,dy) * (180/M_PI) -90;
+        }
+        this->setAngle((predAngle/(double)this->hunterIndex.size()) + noise/2.);
+        this->hunterIndex.clear();
     }
     if (this->isHasTarget() && !this->getIsHunted()) { // Does not eat if a predator is close
         if (fabs(this->getPosition().getX() - this->getTarget().getPosition().getX()) < this->getEatingRange() &&
@@ -71,9 +75,7 @@ void Prey::searchForPredator(World &world) {
             if (distance < min_distance && distance < this->getSensingRange()) {
                 min_distance = distance;
                 this->setIsHunted(true);
-                this->hunterIndex = i;
-            }else{
-                this->setIsHunted(false);
+                this->hunterIndex.push_back(i);
             }
         }
     }
