@@ -13,8 +13,6 @@ class Prey : public Creature {
 private:
     std::vector<int> hunterIndex;
 public:
-    Prey(Vector2 &position, SimParameters &parameters);
-
     void refreshTarget(World &world) override;
 
     void searchForFood(World &world) override;

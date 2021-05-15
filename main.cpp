@@ -71,10 +71,10 @@ int main() {
             creature->setCollectedFood(0.);
             creature->setEnergy(0.);
             creature->clearTarget();
+            creature->setIsHunted(false);
             int location = dis(gen);
             creature->putOnSide(location, *world);
         }
-        int nbOfFilesPred;
         for (int j = 0; j < stepPerDay; ++j) { //Day loop
             for (int k = 0; k < world->getCreaturesCount(); ++k) {
                 auto creature = world->getCreature(k);
