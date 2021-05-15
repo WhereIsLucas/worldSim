@@ -19,8 +19,8 @@ void Prey::stepMove(World &world1) {
     if(this->getIsHunted()){ // If a predator is close
         double dx = world1.getCreature(this->hunterIndex)->getX() - this->getX();
         double dy = world1.getCreature(this->hunterIndex)->getY() - this->getY();
-        double predAngle = atan2(-dx,dy) * (180/M_PI) +90;
-        this->setAngle(predAngle + noise/2. -90);
+        double predAngle = atan2(-dx,dy) * (180/M_PI) -90;
+        this->setAngle(predAngle + noise/2.);
     }
     if (this->isHasTarget() && !this->getIsHunted()) { // Does not eat if a predator is close
         if (fabs(this->getPosition().getX() - this->getTarget().getPosition().getX()) < this->getEatingRange() &&
