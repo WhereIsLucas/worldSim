@@ -80,3 +80,11 @@ Vector2 operator*(double coefficient, Vector2 vector) {
 Vector2 operator-(Vector2 vector1, Vector2 vector2) {
     return Vector2(  vector1.getX()-vector2.getX(), vector1.getY() - vector2.getY());
 }
+
+bool operator==(Vector2 vector1, Vector2 vector2){
+    if(vector1.getX() == vector2.getX() && vector1.getY() == vector2.getY()){
+        return true;
+    }else{
+        return false;
+    }
+}

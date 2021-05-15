@@ -203,3 +203,33 @@ void Creature::setEaten(bool eaten) {
     Creature::eaten = eaten;
 }
 
+void Creature::setIsHunted(bool newIsTargeted) {
+    Creature::isHunted = newIsTargeted;
+}
+
+bool Creature::getIsHunted() const {
+    return isHunted;
+}
+
+void Creature::setHunter(int index) {
+    Hunter = index;
+}
+
+bool Creature::operator==(Creature creature) {
+    if(this->getPosition() == creature.getPosition() && this->getAngle() == creature.getAngle()
+       && this->getSpeed() == creature.getSpeed() && this->getEnergy() == creature.getEnergy()
+       && this->getType() == creature.getType() && this->getCollectedFood() == creature.getCollectedFood()){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+int Creature::getIndexCreature(Creature* creature, World &world){
+    for (int i = 0; i < world.getCreaturesCount(); ++i) {
+        if(world.getCreature(i) == creature)
+        {
+            return i;
+        }
+    }
+}

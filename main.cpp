@@ -12,7 +12,7 @@ int main() {
     std::random_device rd;
     std::mt19937 gen(rd());
 
-    int maxDays = 50;
+    int maxDays = 4;
     int startingPreys = 50;
     int startingPredators = 4;
     int stepPerDay = 100;

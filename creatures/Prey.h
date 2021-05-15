@@ -9,6 +9,8 @@
 #include "Creature.h"
 
 class Prey : public Creature {
+private:
+    int hunterIndex = 10000;
 public:
     Prey(Vector2 &position);
 
@@ -21,6 +23,8 @@ public:
     void clearTarget() override;
 
     Creature *reproduce(Vector2 position) override;
+
+    void searchForPredator(World &world);
 };
 
 

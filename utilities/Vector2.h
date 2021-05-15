@@ -43,6 +43,7 @@ Vector2 crossProduct(Vector2 vector1, Vector2 vector2);
 Vector2 operator+(Vector2 vector1, Vector2 vector2);
 Vector2 operator-(Vector2 vector1, Vector2 vector2);
 Vector2 operator*(double coefficient, Vector2 vector);
+bool operator==(Vector2 vector1, Vector2 vector2);
 
 #endif //TRAVAIL2_VECTOR2_H
 

@@ -23,6 +23,18 @@ private:
     Vector2 velocity;
     Eatable target;
     double angle = 0.;
+    bool isHunted = false;
+    int Hunter = 0;
+
+public:
+    bool getIsHunted() const;
+
+public:
+    void setHunter(int index);
+
+public:
+    void setIsHunted(bool isTargeted);
+
 public:
     double getAngle() const;
 
@@ -112,6 +124,9 @@ public:
 
     std::mt19937 gen;
     double reproductionThreshold = 2.0;
+    bool operator==(Creature creature);
+
+    int getIndexCreature(Creature* creature, World &world);
 };
 
 

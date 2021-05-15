@@ -14,7 +14,15 @@ Prey::Prey(Vector2 &position) : Creature(position) {
 void Prey::stepMove(World &world1) {
     std::uniform_real_distribution<> dis(-45., 45.);
     double noise = dis(this->gen);
-    if (this->isHasTarget()) {
+
+    this->searchForPredator(world1);
+    if(this->getIsHunted()){ // If a predator is close
+        double dx = world1.getCreature(this->hunterIndex)->getX() - this->getX();
+        double dy = world1.getCreature(this->hunterIndex)->getY() - this->getY();
+        double predAngle = atan2(-dx,dy) * (180/M_PI) +90;
+        this->setAngle(predAngle + noise/2. -90);
+    }
+    if (this->isHasTarget() && !this->getIsHunted()) { // Does not eat if a predator is close
         if (fabs(this->getPosition().getX() - this->getTarget().getPosition().getX()) < this->getEatingRange() &&
             fabs(this->getPosition().getY() - this->getTarget().getPosition().getY()) < this->getEatingRange()) {
             world1.getFoodItems()[this->getTarget().getIndex()].setEaten(true);
@@ -43,7 +51,7 @@ void Prey::stepMove(World &world1) {
         double dy = 0 - this->getY();
         this->setAngle(atan2(-dx, dy) * (180 / M_PI) + 90); //angle towards the center
     } else {
-        if (!this->isHasTarget()) {
+        if (!this->isHasTarget() && !this->getIsHunted()) {
             this->setAngle(this->getAngle() + noise); // in degrees
         }
     }
@@ -53,6 +61,24 @@ void Prey::stepMove(World &world1) {
     this->setPosition(this->getPosition() + dVec);
     this->decrementEnergy(getSpeed() * getSpeed() / 100.);
 }
+
+void Prey::searchForPredator(World &world) {
+    double min_distance = 1000000000000.;
+    for (int i = 0; i < world.getCreaturesCount(); ++i) {
+        auto creature = world.getCreature(i);
+        if (creature->getType() == "predator") {
+            double distance = getDistanceBetweenVectors(this->getPosition(), creature->getPosition());
+            if (distance < min_distance && distance < this->getSensingRange()) {
+                min_distance = distance;
+                this->setIsHunted(true);
+                this->hunterIndex = i;
+            }else{
+                this->setIsHunted(false);
+            }
+        }
+    }
+}
+
 
 void Prey::searchForFood(World &world) {
     double min_distance = 1000000000000.;
