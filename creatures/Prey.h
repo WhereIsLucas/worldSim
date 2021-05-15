@@ -11,7 +11,7 @@
 
 class Prey : public Creature {
 private:
-    int hunterIndex = 10000;
+    std::vector<int> hunterIndex;
 public:
     Prey(Vector2 &position, SimParameters &parameters);
 
