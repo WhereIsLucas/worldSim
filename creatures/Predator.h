@@ -12,7 +12,7 @@ class Predator : public Creature {
 private:
     int target_index = 10000;
 public:
-    Predator(Vector2 &position);
+    Predator(Vector2 &position, SimParameters &simParameters);
 
     int getTargetIndex() const;
 

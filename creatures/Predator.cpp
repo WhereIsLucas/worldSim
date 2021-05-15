@@ -30,7 +30,7 @@ void Predator::refreshTarget(World &world1) {
 }
 
 Creature *Predator::reproduce(Vector2 position) {
-    return new Predator(position);
+    return new Predator(position,*this->parameters);
 }
 
 void Predator::clearTarget() {
@@ -100,11 +100,13 @@ void Predator::stepMove(World &world1) {
     this->decrementEnergy(getSpeed() * getSpeed() / 300.);
 }
 
-Predator::Predator(Vector2 &position) : Creature(position) {
-    this->setEatingRange(1.);
+Predator::Predator(Vector2 &position, SimParameters &parameters) : Creature(position, parameters) {
+    this->parameters = &parameters;
+    this->setEatingRange(this->parameters->predatorEatingRange);
+    this->setSpeed(this->parameters->predatorSpeed);
+    this->setSensingRange(this->parameters->predatorSensingRange);
+    this->reproductionThreshold = this->parameters->predatorReproductionThreshold;
+    this->setFieldOfView(this->parameters->predatorFieldOfView);
     this->setType("predator");
-    this->setSpeed(1.2);
-    this->setSensingRange(10);
-    this->reproductionThreshold = 5.0;
 }
 

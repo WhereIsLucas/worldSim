@@ -7,8 +7,9 @@
 #include "Prey.h"
 
 
-Prey::Prey(Vector2 &position) : Creature(position) {
+Prey::Prey(Vector2 &position, SimParameters &parameters) : Creature(position, parameters) {
     this->setType("prey");
+    this->parameters = &parameters;
 }
 
 void Prey::stepMove(World &world1) {
@@ -102,7 +103,7 @@ void Prey::refreshTarget(World &world1) {
 }
 
 Creature *Prey::reproduce(Vector2 position) {
-    return new Prey(position);
+    return new Prey(position, *this->parameters);
 }
 
 void Prey::clearTarget() {

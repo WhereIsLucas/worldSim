@@ -47,15 +47,6 @@ void Creature::setCollectedFood(double collectedFoodArg) {
     this->collectedFood = collectedFoodArg;
 }
 
-Creature::Creature(Vector2 &position) {
-    this->position = position;
-    this->velocity = Vector2(0, 0);
-    this->angle = 45.;
-    std::random_device randomDevice;
-    std::mt19937 generator(randomDevice());
-    this->gen = generator;
-}
-
 void Creature::setAngle(double newAngle) {
     Creature::angle = newAngle;
 }
@@ -177,30 +168,36 @@ double Creature::getAngle() const {
     return angle;
 }
 
-void Creature::setPosition(const Vector2 &position) {
-    Creature::position = position;
+void Creature::setPosition(const Vector2 &positionVec) {
+    Creature::position = positionVec;
 }
 
-Creature *Creature::reproduce(Vector2 position) {
-    return new Creature(position);
+Creature *Creature::reproduce(Vector2 positionVec) {
+    return new Creature(positionVec, *this->parameters);
 }
-
-Creature::Creature(const Vector2 &position) : position(position) {}
 
 const std::string &Creature::getType() const {
     return type;
 }
 
-void Creature::setType(const std::string &type) {
-    Creature::type = type;
+void Creature::setType(const std::string &typeStr) {
+    Creature::type = typeStr;
 }
 
 bool Creature::isEaten() const {
     return eaten;
 }
 
-void Creature::setEaten(bool eaten) {
-    Creature::eaten = eaten;
+void Creature::setEaten(bool eatenBool) {
+    Creature::eaten = eatenBool;
+}
+
+double Creature::getFieldOfView() const {
+    return fieldOfView;
+}
+
+void Creature::setFieldOfView(double fieldOfViewDouble) {
+    Creature::fieldOfView = fieldOfViewDouble;
 }
 
 void Creature::setIsHunted(bool newIsTargeted) {
@@ -232,4 +229,19 @@ int Creature::getIndexCreature(Creature* creature, World &world){
             return i;
         }
     }
+}
+
+Creature::Creature(Vector2 vector2, SimParameters &simParameters){
+    this->position = vector2;
+    this->parameters = &simParameters;
+    this->velocity = Vector2(0, 0);
+    this->angle = 45.;
+    std::random_device randomDevice;
+    std::mt19937 generator(randomDevice());
+    this->gen = generator;
+    this->eatingRange = this->parameters->preyEatingRange;
+    this->sensingRange = this->parameters->preySensingRange;
+    this->speed = this->parameters->preySpeed;
+    this->fieldOfView = this->parameters->preyFieldOfView;
+    this->reproductionThreshold = this->parameters->preyReproductionThreshold;
 }

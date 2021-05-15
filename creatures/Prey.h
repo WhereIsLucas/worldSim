@@ -7,12 +7,13 @@
 
 
 #include "Creature.h"
+#include "../utilities/SimParameters.h"
 
 class Prey : public Creature {
 private:
     int hunterIndex = 10000;
 public:
-    Prey(Vector2 &position);
+    Prey(Vector2 &position, SimParameters &parameters);
 
     void refreshTarget(World &world) override;
 

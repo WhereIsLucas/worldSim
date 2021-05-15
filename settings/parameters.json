@@ -1,0 +1,23 @@
+{
+  "worldWidthX": 200,
+  "worldWidthY": 200,
+  "maxDays": 4,
+  "startingPreys": 50,
+  "startingPredators": 4,
+  "stepPerDay": 100,
+  "foodDensity": 0.00375,
+  "prey": {
+    "baseEatingRange": 0.5,
+    "baseSensingRange": 15,
+    "baseSpeed": 1,
+    "baseFieldOfView": 360,
+    "baseReproductionThreshold": 2
+  },
+  "predator": {
+    "baseEatingRange": 1,
+    "baseSensingRange": 15,
+    "baseSpeed": 1,
+    "baseFieldOfView": 360,
+    "baseReproductionThreshold": 2
+  }
+}

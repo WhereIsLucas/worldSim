@@ -5,35 +5,36 @@
 #include "Cell.h"
 #include "creatures/Prey.h"
 #include "creatures/Predator.h"
+#include "utilities/SimParameters.h"
 #include <fstream>
 #include <random>
 
 int main() {
     std::random_device rd;
     std::mt19937 gen(rd());
+    auto parameters = new SimParameters("settings");
 
-    int maxDays = 4;
-    int startingPreys = 50;
-    int startingPredators = 4;
-    int stepPerDay = 100;
 
-    double worldXWidth = 200.;
-    double worldYWidth = 200.;
+    int maxDays = parameters->maxDays;
+    int startingPreys = parameters->startingPreys;
+    int startingPredators = parameters->startingPredators;
+    int stepPerDay = parameters->stepPerDay;
+
     std::string fileName = "results/world.txt";
     remove(fileName.c_str());
 
     std::ofstream file;
     file.open(fileName.c_str(), std::ios::app);
     file.precision(10);
-    file << worldXWidth << "," << worldYWidth << std::endl;
+    file << parameters->worldWidthX << "," << parameters->worldWidthY << std::endl;
     file.close();
 
     //Maybe we should work with food density
-    double foodDensity = 0.00375;
-    int foodPerDay = (int) (worldXWidth * worldYWidth * foodDensity);
+    double foodDensity = parameters->foodDensity;
+    int foodPerDay = (int) (parameters->worldWidthX * parameters->worldWidthY * foodDensity);
     std::cout << foodPerDay << std::endl;
 
-    auto world = new World(worldXWidth, worldYWidth);
+    auto world = new World(parameters->worldWidthX, parameters->worldWidthY);
 
     //We prepare the printers & clear the old files
     auto preysPrinter = new CreaturesPrinter("results/preys/");
@@ -50,14 +51,14 @@ int main() {
     for (int i = 0; i < startingPreys; ++i) {
         int location = dis(gen);
         auto position = Vector2(0, 0);
-        auto newCreature = new Prey(position);
+        auto newCreature = new Prey(position, *parameters);
         newCreature->putOnSide(location, *world);
         world->addCreature(*newCreature);
     }
     for (int i = 0; i < (startingPredators); ++i) {
         int location = dis(gen);
         auto position = Vector2(0, 0);
-        auto newCreature = new Predator(position);
+        auto newCreature = new Predator(position, *parameters);
         newCreature->putOnSide(location, *world);
         world->addCreature(*newCreature);
     }
@@ -96,7 +97,7 @@ int main() {
         }
         for (int i = 0; i < world->getCreaturesCount(); ++i) {
             auto creature = world->getCreature(i);
-            if (creature->isEaten()){
+            if (creature->isEaten()) {
                 world->removeCreature(i);
             }
         }

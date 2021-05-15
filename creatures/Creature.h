@@ -10,14 +10,20 @@ class World;
 #include "../World.h"
 #include "../food/FoodPlant.h"
 #include "../utilities/Vector2.h"
+#include "../utilities/SimParameters.h"
 #include <optional>
 #include <random>
 
 class Creature {
 private:
     Vector2 position;
+protected:
+    Creature(Vector2 vector2, SimParameters &parameters);
+
 public:
     void setPosition(const Vector2 &position);
+
+    SimParameters *parameters;
 
 private:
     Vector2 velocity;
@@ -39,7 +45,7 @@ public:
     double getAngle() const;
 
 private:
-    double eatingRange = 0.5;
+    double eatingRange;
 public:
     double getEatingRange() const;
 
@@ -51,13 +57,21 @@ private:
 
 public:
     double getSensingRange() const;
+
     void setSensingRange(double sensingRange);
 
 private:
     //Creatures can detect food within this range
-    double speed = 1.;
+    double speed;
     double energy = 0.;
     double collectedFood = 0.;
+    double fieldOfView;
+public:
+    double getFieldOfView() const;
+
+    void setFieldOfView(double fieldOfView);
+
+private:
     bool hasTarget = false;
     std::string type = "";
     bool eaten = false;
@@ -72,10 +86,6 @@ public:
     void setType(const std::string &type);
 
 public:
-    Creature(Vector2 &position);
-
-    Creature(const Vector2 &position);
-
     void setTarget(Eatable target);
 
     virtual void clearTarget();
@@ -123,10 +133,11 @@ public:
     virtual Creature *reproduce(Vector2 position);
 
     std::mt19937 gen;
-    double reproductionThreshold = 2.0;
+    double reproductionThreshold;
+
     bool operator==(Creature creature);
 
-    int getIndexCreature(Creature* creature, World &world);
+    int getIndexCreature(Creature *creature, World &world);
 };
 
 
