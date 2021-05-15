@@ -5,22 +5,47 @@
 #include <cstdlib>
 #include <random>
 #include "World.h"
+#include "creatures/Prey.h"
+#include "creatures/Predator.h"
 
 World::World(double x, double y) : x(x), y(y) {
     World::x = x;
     World::y = y;
 }
 
-void World::addCreature(Creature creature) {
-    World::creatures.push_back(creature);
+void World::addCreature(Creature &creature) {
+    World::creatures.push_back(&creature);
 }
+
 
 unsigned long World::getCreaturesCount() {
     return World::creatures.size();
 }
 
-Creature *World::getCreature(int index) {
-    return &World::creatures[index];
+unsigned long World::getPreysCount() {
+    unsigned long count = 0;
+    for (int i = 0; i < this->getCreaturesCount(); ++i) {
+        auto creature = this->getCreature(i);
+        if (creature->getType() == "prey") {
+            count++;
+        }
+    }
+    return count;
+}
+
+unsigned long World::getPredatorsCount() {
+    unsigned long count = 0;
+    for (int i = 0; i < this->getCreaturesCount(); ++i) {
+        auto creature = this->getCreature(i);
+        if (creature->getType() == "predator") {
+            count++;
+        }
+    }
+    return count;
+}
+
+Creature* World::getCreature(int index) {
+    return World::creatures[index];
 }
 
 double World::getX() const {

@@ -6,7 +6,7 @@
 #define CHAOSFRACTACLE_CREATURESPRINTER_H
 
 
-#include "../Creature.h"
+#include "../creatures/Creature.h"
 
 class CreaturesPrinter {
 private:

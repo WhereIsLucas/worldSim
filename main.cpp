@@ -3,6 +3,8 @@
 #include "printers/CreaturesPrinter.h"
 #include "printers/FoodPrinter.h"
 #include "Cell.h"
+#include "creatures/Prey.h"
+#include "creatures/Predator.h"
 #include <fstream>
 #include <random>
 
@@ -10,9 +12,9 @@ int main() {
     std::random_device rd;
     std::mt19937 gen(rd());
 
-    int maxDays = 3;
-    int startingPreys = 6;
-    int startingPredators = 2;
+    int maxDays = 50;
+    int startingPreys = 50;
+    int startingPredators = 5;
     int stepPerDay = 100;
 
     double worldXWidth = 200.;
@@ -45,21 +47,20 @@ int main() {
 
     std::uniform_int_distribution<> dis(0, 3);
     //We start the world and place creatures on the sides
-    int startingCreatures = startingPreys + startingPredators ;
-    for (int i = 0; i < (startingCreatures); ++i) {
+    for (int i = 0; i < startingPreys; ++i) {
         int location = dis(gen);
         auto position = Vector2(0, 0);
-        bool predator = false;
-        if(i >= startingCreatures - startingPredators){
-            predator = true; // adding predators
-        }
-        auto newCreature = new Creature(position, predator);
+        auto newCreature = new Prey(position);
         newCreature->putOnSide(location, *world);
         world->addCreature(*newCreature);
     }
-
-    std::cout << "Cells are positioned" << std::endl;
-
+    for (int i = 0; i < (startingPredators); ++i) {
+        int location = dis(gen);
+        auto position = Vector2(0, 0);
+        auto newCreature = new Predator(position);
+        newCreature->putOnSide(location, *world);
+        world->addCreature(*newCreature);
+    }
     //Days loop
     for (int day = 0; day < maxDays; ++day) {
         world->clearFood();
@@ -67,7 +68,6 @@ int main() {
         for (int i = 0; i < world->getCreaturesCount(); ++i) { //Morning loop
             auto creature = world->getCreature(i);
             creature->setCollectedFood(0.);
-            creature->setCollectPrey(0);
             creature->setEnergy(0.);
             creature->clearTarget();
             int location = dis(gen);
@@ -84,20 +84,21 @@ int main() {
                     creature->searchForFood(*world);
                 }
                 creature->stepMove(*world);
-                if(creature->isPredator()){ // Printing in different files for different colours
+                if (dynamic_cast<Predator *>(creature) !=
+                    nullptr) { // Printing in different files for different colours
                     predatorsPrinter->print(creature, day * stepPerDay + j, "predator", false);
                     nbOfFilesPred = day * stepPerDay + j;
-                } else{
+                } else {
                     preysPrinter->print(creature, day * stepPerDay + j, "prey", false);
                 }
             }
             foodPrinter->print(world, day * stepPerDay + j);
         }
-        if((day * stepPerDay + 100 - 1) - nbOfFilesPred > 0){ // if there are no more predators
-            for (int j = nbOfFilesPred+1; j < day * stepPerDay + stepPerDay; ++j) {
-                predatorsPrinter->print(world->getCreature(1), j, "predator", true);
-            }
-        }
+//        if((day * stepPerDay + 100 - 1) - nbOfFilesPred > 0){ // if there are no more predators
+//            for (int j = nbOfFilesPred+1; j < day * stepPerDay + stepPerDay; ++j) {
+//                predatorsPrinter->print(world->getCreature(1), j, "predator", true);
+//            }
+//        }
 
 
         double meanSpeed = 0.;
@@ -119,11 +120,7 @@ int main() {
                 if (energyBalance > 2.) {
                     int location = dis(gen);
                     auto position = Vector2(0, 0);
-                    bool predator = false;
-                    if(creature->isPredator()){ // Reproduction of the predator
-                        predator = true;
-                    }
-                    auto newCreature = new Creature(position,predator);
+                    auto newCreature = creature->reproduce(position);
                     newCreature->putOnSide(location, *world);
 //                    double parentSpeed = creature->getSpeed();
 //                    double noise = noiseDis(gen);
@@ -134,11 +131,15 @@ int main() {
                 world->removeCreature(i); // The creature dies if energyBalance < 0
             }
         }
+        std::cout << "Day " << day << " - preys : " << world->getPreysCount() << " - predator : "
+                  << world->getPredatorsCount() << std::endl;
         std::cout << "Day " << day << " - creatures : " << world->getCreaturesCount() << std::endl;
         fileName = "results/creatureCount.txt";
         file.open(fileName.c_str(), std::ios::app);
         file.precision(10);
         file << std::to_string(day) << "," << world->getCreaturesCount() << "," << energyTotal << "," << meanSpeed
+        << "," << world->getPreysCount()
+        << "," << world->getPredatorsCount()
              << std::endl;
         file.close();
     }

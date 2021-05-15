@@ -11,15 +11,15 @@
 
 ## Todo
 
-* Make predators faster than preys
-* Allow preys to run away from predators
-* Adjust a sensing range for predators (conical form rather than a circle to represent the reality better)
-* Think about and opt for the best eating range
-* Decide when predators can replicate (after one or two preys)
-* Review the number of steps because they don't lose enough energy and come back the next day even though they haven't eaten (see with speed as well)
-* Plot the evolution of predators and preys population
-* Potentially find a better random because two creatures overlap when put on the sides far too often (and if it is a predator and a prey, the latter is directly eaten)
-* Perhaps make the world a bit smaller (or increase steps per day) ? Because the creatures do not even have time to cover half of the plane in a day
+- [x] Make predators faster than preys
+- [ ]  Allow preys to run away from predators
+- [ ]  Adjust a sensing range for predators (conical form rather than a circle to represent the reality better)
+- [ ]  Think about and opt for the best eating range
+- [ ]  Decide when predators can replicate (after one or two preys)
+- [ ]  Review the number of steps because they don't lose enough energy and come back the next day even though they haven't eaten (see with speed as well)
+- [ ]  Plot the evolution of predators and preys population
+- [ ]  Potentially find a better random because two creatures overlap when put on the sides far too often (and if it is a predator and a prey, the latter is directly eaten)
+- [ ]  Perhaps make the world a bit smaller (or increase steps per day) ? Because the creatures do not even have time to cover half of the plane in a day
 
 ## A few ideas :
 

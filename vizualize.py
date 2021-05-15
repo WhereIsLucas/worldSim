@@ -3,7 +3,8 @@ import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 
 import numpy as np
-#from plyer import notification
+
+# from plyer import notification
 
 types = ['float', 'float']
 domainTypes = ['float', 'float']
@@ -24,20 +25,23 @@ num_files = len([f for f in os.listdir(path1) if os.path.isfile(os.path.join(pat
 totalFrames = min(num_files - 1, 1500)
 for i in range(0, totalFrames):
     fileName = path1 + "prey" + str(i) + ".txt"
-    preysData.insert(i, np.genfromtxt(fileName,
-                                      delimiter=',',
-                                      dtype=types,
-                                      names=['x', 'y']))
-    fileName = path2 + "predator" + str(i) + ".txt"
-    predatorsData.insert(i, np.genfromtxt(fileName,
+    if os.path.exists(fileName):
+        preysData.insert(i, np.genfromtxt(fileName,
                                           delimiter=',',
                                           dtype=types,
-                                          names=['x','y']))
-    
+                                          names=['x', 'y']))
+
+    fileName = path2 + "predator" + str(i) + ".txt"
+    if os.path.exists(fileName):
+        predatorsData.insert(i, np.genfromtxt(fileName,
+                                              delimiter=',',
+                                              dtype=types,
+                                              names=['x', 'y']))
+
 showingFrame = 0
 preysScatGraph = plt.scatter(preysData[showingFrame]["x"], preysData[showingFrame]['y'], alpha=0.5, s=20,
                              c='red', label='prey')
-predatorsScatGraph = plt.scatter(predatorsData[showingFrame]["x"], predatorsData[showingFrame]['y'], alpha=0.5, s=20, 
+predatorsScatGraph = plt.scatter(predatorsData[showingFrame]["x"], predatorsData[showingFrame]['y'], alpha=0.5, s=20,
                                  c='green', label='predator')
 # red are preys
 # green are predators
@@ -84,7 +88,7 @@ animation.save('exports/im.mp4', writer=writer)
 title = 'worldSim'
 message = 'Video is ready'
 
-#notification.notify(title=title,
+# notification.notify(title=title,
 #                   message=message,
 #                   app_icon=None,
 #                   timeout=10,

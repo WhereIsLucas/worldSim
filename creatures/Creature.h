@@ -7,41 +7,60 @@
 
 class World;
 
-#include "World.h"
-#include "food/FoodPlant.h"
-#include "utilities/Vector2.h"
+#include "../World.h"
+#include "../food/FoodPlant.h"
+#include "../utilities/Vector2.h"
 #include <optional>
+#include <random>
 
 class Creature {
 private:
     Vector2 position;
+public:
+    void setPosition(const Vector2 &position);
+
+private:
     Vector2 velocity;
     Eatable target;
-    int linkedCell = -9;
-    int linkedCreature = -9;
-    double angle;
-    double eatingRange = 0.5; //Creatures can eat food within this range
-    double eatingRangePred = 1.; // Predators can eat preys within this range
-    double sensingRange = 15; //Creatures can detect food within this range
+    double angle = 0.;
+public:
+    double getAngle() const;
+
+private:
+    double eatingRange = 0.5;
+public:
+    double getEatingRange() const;
+
+    void setEatingRange(double eatingRange);
+
+private:
+    //Creatures can eat food within this range
+    double sensingRange = 15;
+
+public:
+    double getSensingRange() const;
+    void setSensingRange(double sensingRange);
+
+private:
+    //Creatures can detect food within this range
     double speed = 1.;
     double energy = 0.;
     double collectedFood = 0.;
     bool hasTarget = false;
-    bool predator; // If true --> predator
-    int target_index = 10000;
-    int collectPrey = 0.;
+    std::string type = "";
 public:
-//    void setTargetIndex(int targetIndex);
-//    int getTargetIndex() const;
+    const std::string &getType() const;
 
-    void setCollectPrey(int collectPrey);
+    void setType(const std::string &type);
 
 public:
-    Creature(Vector2 &position, bool &predator);
+    Creature(Vector2 &position);
+
+    Creature(const Vector2 &position);
 
     void setTarget(Eatable target);
 
-    void clearTarget();
+    virtual void clearTarget();
 
     bool isHasTarget() const;
 
@@ -53,17 +72,13 @@ public:
 
     double getY();
 
-    void setLinkedCell(int i);
+    virtual void searchForFood(World &world);
 
-    void setLinkedCreature(int creatureIndex);
-
-    void searchForFood(World &world);
-
-    void refreshTarget(World &world);
+    virtual void refreshTarget(World &world);
 
     double getCollectedFood();
 
-    void stepMove(World &world1);
+    virtual void stepMove(World &world1);
 
     Vector2 &getPosition();
 
@@ -87,7 +102,9 @@ public:
 
     void setSpeed(double speed);
 
-    bool isPredator() const;
+    virtual Creature *reproduce(Vector2 position);
+
+    std::mt19937 gen;
 };
 
 
