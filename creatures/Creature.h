@@ -48,6 +48,12 @@ private:
     double collectedFood = 0.;
     bool hasTarget = false;
     std::string type = "";
+    bool eaten = false;
+public:
+    bool isEaten() const;
+
+    void setEaten(bool eaten);
+
 public:
     const std::string &getType() const;
 
@@ -105,6 +111,7 @@ public:
     virtual Creature *reproduce(Vector2 position);
 
     std::mt19937 gen;
+    double reproductionThreshold = 2.0;
 };
 
 

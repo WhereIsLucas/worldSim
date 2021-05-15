@@ -11,7 +11,7 @@ void Predator::searchForFood(World &world) {
     double min_distance = 1000000000000.;
     for (int i = 0; i < world.getCreaturesCount(); ++i) {
         auto creature = world.getCreature(i);
-        if (creature->getType() == "prey") {
+        if (creature->getType() == "prey" && !creature->isEaten()) {
             double distance = getDistanceBetweenVectors(this->getPosition(), creature->getPosition());
             if (distance < min_distance && distance < this->getSensingRange()) {
                 min_distance = distance;
@@ -23,7 +23,7 @@ void Predator::searchForFood(World &world) {
 }
 
 void Predator::refreshTarget(World &world1) {
-    if (this->target_index == -9) { // target has been eaten
+    if (this->target_index == -9 || world1.getCreature(this->target_index)->isEaten()) { // target has been eaten
         this->clearTarget();
         this->searchForFood(world1);
     }
@@ -46,7 +46,7 @@ void Predator::setTargetIndex(int targetIndex) {
     target_index = targetIndex;
 }
 
-int Predator::getCollectPrey() const {
+int Predator::getCollectPrey() {
     return collectPrey;
 }
 
@@ -56,15 +56,16 @@ void Predator::setCollectPrey(int collectedPrey) {
 
 void Predator::stepMove(World &world1) {
     std::uniform_real_distribution<> dis(-45., 45.);
+    double energyThreshold = 5.;
     double noise = dis(this->gen);
-    if (this->isHasTarget()) {
+    if (this->isHasTarget() && this->getEnergy() <= energyThreshold) {
         int i = this->target_index;
         if (fabs(this->getX() - world1.getCreature(i)->getX()) < this->getEatingRange() &&
             fabs(this->getY() - world1.getCreature(i)->getY()) < this->getEatingRange()) {
-//            this->setCollectPrey(1); // One prey is caught by the predator
+            this->setCollectPrey(this->getCollectPrey()+1); // One prey is caught by the predator
             this->setCollectedFood(this->getCollectedFood() + 5.);
             this->clearTarget();
-            world1.removeCreature(i); // the prey is eaten and so removed
+            world1.setCreatureAsEaten(i); // the prey is eaten and so removed
         } else {
             double dx = world1.getCreature(i)->getX() - this->getX();
             double dy = world1.getCreature(i)->getY() - this->getY();
@@ -88,7 +89,7 @@ void Predator::stepMove(World &world1) {
         double dy = 0 - this->getY();
         this->setAngle(atan2(-dx, dy) * (180 / M_PI) + 90); //angle towards the center
     } else {
-        if (!this->isHasTarget()) {
+        if (!this->isHasTarget() || this->getEnergy() > energyThreshold) {
             this->setAngle(this->getAngle() + noise); // in degrees
         }
     }
@@ -102,7 +103,8 @@ void Predator::stepMove(World &world1) {
 Predator::Predator(Vector2 &position) : Creature(position) {
     this->setEatingRange(1.);
     this->setType("predator");
-    this->setSpeed(1.5);
-    this->setSensingRange(20);
+    this->setSpeed(1.2);
+    this->setSensingRange(10);
+    this->reproductionThreshold = 5.0;
 }
 

@@ -43,6 +43,8 @@ public:
 
     unsigned long getPredatorsCount();
 
+    void setCreatureAsEaten(int index);
+
 private:
     double x;
     double y;

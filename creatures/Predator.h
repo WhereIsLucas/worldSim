@@ -18,14 +18,14 @@ public:
 
     void setTargetIndex(int targetIndex);
 
-    int getCollectPrey() const;
+    int getCollectPrey();
 
     void setCollectPrey(int collectPrey);
 
     void stepMove(World &world1) override;
 
 private:
-    double collectPrey = 1.;
+    double collectPrey = 0;
 
 public:
     void searchForFood(World &world) override;

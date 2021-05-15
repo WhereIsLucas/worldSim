@@ -14,7 +14,7 @@ int main() {
 
     int maxDays = 50;
     int startingPreys = 50;
-    int startingPredators = 5;
+    int startingPredators = 4;
     int stepPerDay = 100;
 
     double worldXWidth = 200.;
@@ -77,29 +77,29 @@ int main() {
         for (int j = 0; j < stepPerDay; ++j) { //Day loop
             for (int k = 0; k < world->getCreaturesCount(); ++k) {
                 auto creature = world->getCreature(k);
-                if (creature->isHasTarget()) {
-                    creature->refreshTarget(*world);
-                }
-                if (!creature->isHasTarget()) {
-                    creature->searchForFood(*world);
-                }
-                creature->stepMove(*world);
-                if (dynamic_cast<Predator *>(creature) !=
-                    nullptr) { // Printing in different files for different colours
-                    predatorsPrinter->print(creature, day * stepPerDay + j, "predator", false);
-                    nbOfFilesPred = day * stepPerDay + j;
-                } else {
-                    preysPrinter->print(creature, day * stepPerDay + j, "prey", false);
+                if (!creature->isEaten()) {
+                    if (creature->isHasTarget()) {
+                        creature->refreshTarget(*world);
+                    }
+                    if (!creature->isHasTarget()) {
+                        creature->searchForFood(*world);
+                    }
+                    creature->stepMove(*world);
+                    if (creature->getType() == "predator") { // Printing in different files for different colours
+                        predatorsPrinter->print(creature, day * stepPerDay + j, "predator", false);
+                    } else {
+                        preysPrinter->print(creature, day * stepPerDay + j, "prey", false);
+                    }
                 }
             }
             foodPrinter->print(world, day * stepPerDay + j);
         }
-//        if((day * stepPerDay + 100 - 1) - nbOfFilesPred > 0){ // if there are no more predators
-//            for (int j = nbOfFilesPred+1; j < day * stepPerDay + stepPerDay; ++j) {
-//                predatorsPrinter->print(world->getCreature(1), j, "predator", true);
-//            }
-//        }
-
+        for (int i = 0; i < world->getCreaturesCount(); ++i) {
+            auto creature = world->getCreature(i);
+            if (creature->isEaten()){
+                world->removeCreature(i);
+            }
+        }
 
         double meanSpeed = 0.;
         unsigned long count = world->getCreaturesCount(); //We take it now before adding other creatures;
@@ -117,7 +117,7 @@ int main() {
             double energyBalance = creature->getEnergy() + creature->getCollectedFood();
             energyTotal += energyBalance;
             if (energyBalance > 0.) {
-                if (energyBalance > 2.) {
+                if (energyBalance > creature->reproductionThreshold) {
                     int location = dis(gen);
                     auto position = Vector2(0, 0);
                     auto newCreature = creature->reproduce(position);
@@ -138,8 +138,8 @@ int main() {
         file.open(fileName.c_str(), std::ios::app);
         file.precision(10);
         file << std::to_string(day) << "," << world->getCreaturesCount() << "," << energyTotal << "," << meanSpeed
-        << "," << world->getPreysCount()
-        << "," << world->getPredatorsCount()
+             << "," << world->getPreysCount()
+             << "," << world->getPredatorsCount()
              << std::endl;
         file.close();
     }

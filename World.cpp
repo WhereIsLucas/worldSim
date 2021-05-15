@@ -79,7 +79,13 @@ std::vector<FoodPlant> &World::getFoodItems() {
 }
 
 void World::removeCreature(int index) {
+    auto creature = World::getCreature(index);
     World::creatures.erase(World::creatures.begin() + index);
+}
+
+void World::setCreatureAsEaten(int index){
+    auto creature = World::getCreature(index);
+    creature->setEaten(true);
 }
 
 void World::removeFoodItem(int index) {

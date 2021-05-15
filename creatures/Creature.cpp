@@ -2,10 +2,7 @@
 // Created by lucas on 07.05.21.
 //
 
-#include <cstdlib>
 #include "Creature.h"
-#include "../World.h"
-#include "../utilities/Vector2.h"
 #include <cmath>
 #include <random>
 #include <iostream>
@@ -196,5 +193,13 @@ const std::string &Creature::getType() const {
 
 void Creature::setType(const std::string &type) {
     Creature::type = type;
+}
+
+bool Creature::isEaten() const {
+    return eaten;
+}
+
+void Creature::setEaten(bool eaten) {
+    Creature::eaten = eaten;
 }
 
