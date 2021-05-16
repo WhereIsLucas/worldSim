@@ -16,14 +16,14 @@ void Prey::stepMove(World &world1) {
     std::uniform_real_distribution<> dis(-45., 45.);
     double noise = dis(this->gen);
 
-    if(!this->hunterIndex.empty()){ // If a predator is close
+    if (!this->hunterIndex.empty()) { // If a predator is close
         double predAngle = 0.;
         for (int i : this->hunterIndex) {
             double dx = world1.getCreature(i)->getX() - this->getX();
             double dy = world1.getCreature(i)->getY() - this->getY();
-            predAngle += atan2(-dx,dy) * (180 / M_PI) - 90.;
+            predAngle += atan2(-dx, dy) * (180 / M_PI) - 90.;
         }
-        this->setAngle((predAngle/(double)this->hunterIndex.size()) + noise / 2.);
+        this->setAngle((predAngle / (double) this->hunterIndex.size()) + noise / 2.);
         this->hunterIndex.clear();
     }
     if (this->isHasTarget() && !this->getIsHunted()) { // Does not eat if a predator is close
@@ -86,9 +86,15 @@ void Prey::searchForFood(World &world) {
         if (!foodItem.isEaten()) {
             double distance = getDistanceBetweenVectors(this->getPosition(), foodItem.getPosition());
             if (distance < min_distance && distance < this->getSensingRange()) {
-                min_distance = distance;
-                this->setTarget(foodItem);
-                this->setHasTarget(true);
+                double dx = foodItem.getPosition().getX() - this->getX();
+                double dy = foodItem.getPosition().getY() - this->getY();
+                double targetAngle = atan2(-dx, dy) * (180 / M_PI) + 90;
+                if (targetAngle <= this->getAngle() - this->getFieldOfView() / 2. &&
+                    targetAngle <= this->getAngle() + this->getFieldOfView() / 2.) { //Cone vision
+                    min_distance = distance;
+                    this->setTarget(foodItem);
+                    this->setHasTarget(true);
+                }
             }
         }
     }
@@ -110,10 +116,11 @@ void Prey::clearTarget() {
     Creature::clearTarget();
 }
 
+
 double Prey::getPredatorSensingRange() const {
     return predatorSensingRange;
 }
 
-void Prey::setPredatorSensingRange(double predatorSensingRange) {
-    Prey::predatorSensingRange = predatorSensingRange;
+void Prey::setPredatorSensingRange(double predatorSensingRangeDouble) {
+    Prey::predatorSensingRange = predatorSensingRangeDouble;
 }

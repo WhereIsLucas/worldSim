@@ -23,6 +23,7 @@ path1 = "./cmake-build-debug/results/preys/"
 path2 = "./cmake-build-debug/results/predators/"
 num_files = len([f for f in os.listdir(path1) if os.path.isfile(os.path.join(path1, f))])
 totalFrames = min(num_files - 1, 1500)
+print(totalFrames)
 for i in range(0, totalFrames):
     fileName = path1 + "prey" + str(i) + ".txt"
     if os.path.exists(fileName):

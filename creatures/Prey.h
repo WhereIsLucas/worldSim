@@ -11,8 +11,13 @@
 
 class Prey : public Creature {
 private:
+
     std::vector<int> hunterIndex;
+    double predatorSensingRange = 10.;
+
 public:
+    Prey(Vector2 &position, SimParameters &parameters);
+
     void refreshTarget(World &world) override;
 
     void searchForFood(World &world) override;
@@ -24,6 +29,11 @@ public:
     Creature *reproduce(Vector2 position) override;
 
     void searchForPredator(World &world);
+
+    double getPredatorSensingRange() const;
+
+
+    void setPredatorSensingRange(double predatorSensingRange);
 };
 
 
