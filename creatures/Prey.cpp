@@ -5,7 +5,8 @@
 #include <random>
 #include <iostream>
 #include "Prey.h"
-
+std::random_device randomDevice2;
+std::mt19937 generator2(randomDevice2());
 
 Prey::Prey(Vector2 &position, SimParameters &parameters) : Creature(position, parameters) {
     this->setType("prey");
@@ -14,7 +15,7 @@ Prey::Prey(Vector2 &position, SimParameters &parameters) : Creature(position, pa
 
 void Prey::stepMove(World &world1) {
     std::uniform_real_distribution<> dis(-45., 45.);
-    double noise = dis(this->gen);
+    double noise = dis(randomDevice2);
 
     if (!this->hunterIndex.empty()) { // If a predator is close
         double predAngle = 0.;
@@ -23,7 +24,7 @@ void Prey::stepMove(World &world1) {
             double dy = world1.getCreature(i)->getY() - this->getY();
             predAngle += atan2(-dx, dy) * (180 / M_PI) - 90.;
         }
-        this->setAngle((predAngle / (double) this->hunterIndex.size()) + noise / 2.);
+        this->setAngle((predAngle / (double) this->hunterIndex.size()) + noise / 1.5);
         this->hunterIndex.clear();
     }
     if (this->isHasTarget() && !this->getIsHunted()) { // Does not eat if a predator is close

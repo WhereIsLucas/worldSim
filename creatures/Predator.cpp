@@ -6,6 +6,8 @@
 #include <random>
 #include "Predator.h"
 
+std::random_device randomDevice1;
+std::mt19937 generator1(randomDevice1());
 
 void Predator::searchForFood(World &world) {
     double min_distance = 1000000000000.;
@@ -57,7 +59,7 @@ void Predator::setCollectPrey(int collectedPrey) {
 void Predator::stepMove(World &world1) {
     std::uniform_real_distribution<> dis(-45., 45.);
     double energyThreshold = 5.;
-    double noise = dis(this->gen);
+    double noise = dis(randomDevice1);
     if (this->isHasTarget() && this->getEnergy() <= energyThreshold) {
         int i = this->target_index;
         if (fabs(this->getX() - world1.getCreature(i)->getX()) < this->getEatingRange() &&

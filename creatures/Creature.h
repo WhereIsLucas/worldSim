@@ -132,12 +132,13 @@ public:
 
     virtual Creature *reproduce(Vector2 position);
 
-    std::mt19937 gen;
+    //std::mt19937 gen;
+
     double reproductionThreshold;
 
     bool operator==(Creature creature);
 
-    int getIndexCreature(Creature *creature, World &world);
+    //int getIndexCreature(Creature *creature, World &world);
 };
 
 

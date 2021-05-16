@@ -7,7 +7,8 @@
 #include <random>
 #include <iostream>
 
-
+std::random_device randomDevice;
+std::mt19937 generator(randomDevice());
 
 double Creature::getCollectedFood() {
     return this->collectedFood;
@@ -15,7 +16,7 @@ double Creature::getCollectedFood() {
 
 void Creature::stepMove(World &world1) {
     std::uniform_real_distribution<> dis(-45., 45.);
-    double noise = dis(gen);
+    double noise = dis(randomDevice);
     if (fabs(this->getX()) >= world1.getX() / 2. || fabs(this->getY()) >= world1.getY() / 2.) { //If close to the borders
         if (this->getX() >= world1.getX() / 2.) {
             this->position.setX(world1.getX() / 2.);
@@ -117,21 +118,21 @@ void Creature::putOnSide(int direction, World &world1){
     switch (direction) {
         case 0:
             newPosition.setComponents(((-world1.getX() / 2.)),
-                                   ((world1.getY()) * dis(gen)));
+                                   ((world1.getY()) * dis(randomDevice)));
             newAngle = 0.;
             break;
         case 1:
             newPosition.setComponents(((world1.getX() / 2.)),
-                                   ((world1.getY())*dis(gen)));
+                                   ((world1.getY())*dis(randomDevice)));
             newAngle = 180.;
             break;
         case 2:
-            newPosition.setComponents((((world1.getX())*dis(gen))),
+            newPosition.setComponents((((world1.getX())*dis(randomDevice))),
                                    ((-world1.getY() / 2.)));
             newAngle = 90.;
             break;
         case 3:
-            newPosition.setComponents((((world1.getX())*dis(gen))),
+            newPosition.setComponents((((world1.getX())*dis(randomDevice))),
                                    ((world1.getY() / 2.)));
             newAngle = 270.;
             break;
@@ -221,27 +222,27 @@ bool Creature::operator==(Creature creature) {
         return false;
     }
 }
+//
+//int Creature::getIndexCreature(Creature* creature, World &world){
+//    for (int i = 0; i < world.getCreaturesCount(); ++i) {
+//        if(world.getCreature(i) == creature)
+//        {
+//            return i;
+//        }
+//    }
+//}
 
-int Creature::getIndexCreature(Creature* creature, World &world){
-    for (int i = 0; i < world.getCreaturesCount(); ++i) {
-        if(world.getCreature(i) == creature)
-        {
-            return i;
-        }
-    }
-}
 
 Creature::Creature(Vector2 vector2, SimParameters &simParameters){
     this->position = vector2;
     this->parameters = &simParameters;
     this->velocity = Vector2(0, 0);
     this->angle = 45.;
-    std::random_device randomDevice;
-    std::mt19937 generator(randomDevice());
-    this->gen = generator;
     this->eatingRange = this->parameters->preyEatingRange;
     this->sensingRange = this->parameters->preySensingRange;
     this->speed = this->parameters->preySpeed;
     this->fieldOfView = this->parameters->preyFieldOfView;
     this->reproductionThreshold = this->parameters->preyReproductionThreshold;
 }
+
+
