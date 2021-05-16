@@ -72,7 +72,7 @@ void Predator::stepMove(World &world1) {
             double dx = world1.getCreature(i)->getX() - this->getX();
             double dy = world1.getCreature(i)->getY() - this->getY();
             double targetAngle = atan2(-dx, dy) * (180 / M_PI) + 90;
-            Creature::setAngle(targetAngle + noise / 3.);
+            this->setAngle(targetAngle + noise / 3.);
         }
     }
     if (fabs(this->getX()) >= world1.getX() / 2. ||

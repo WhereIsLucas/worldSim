@@ -25,10 +25,14 @@
 * predator/prey behaviour
 * Multiple layers of food chain (herbivore/carnivore)
 * Personality traits (reckless vs cautious)
-* 
 
 ## and now
 
 * speed
 * predator/prey behaviour
 * terrains effect
+
+## Problems
+- In the files representing the last step of the day, preys reach very peculiar values in energy.
+- On the simulation, we can see that preys sometimes cross a food but do not eat it. Might explain our difficulty for 
+  finding the right parameters.

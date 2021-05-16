@@ -53,14 +53,14 @@ int main() {
         int location = dis(gen);
         auto position = Vector2(0, 0);
         auto newCreature = new Prey(position, *parameters);
-        newCreature->putOnSide(location, *world);
+        //newCreature->putOnSide(location, *world);
         world->addCreature(*newCreature);
     }
     for (int i = 0; i < (startingPredators); ++i) {
         int location = dis(gen);
         auto position = Vector2(0, 0);
         auto newCreature = new Predator(position, *parameters);
-        newCreature->putOnSide(location, *world);
+        //newCreature->putOnSide(location, *world);
         world->addCreature(*newCreature);
     }
     //Days loop
@@ -74,7 +74,9 @@ int main() {
             creature->clearTarget();
             creature->setIsHunted(false);
             int location = dis(gen);
-            creature->putOnSide(location, *world);
+            if(creature->getType() == "prey"){
+                creature->putOnSide(location, *world);
+            }
         }
         for (int j = 0; j < stepPerDay; ++j) { //Day loop
             for (int k = 0; k < world->getCreaturesCount(); ++k) {
@@ -123,7 +125,9 @@ int main() {
                     int location = dis(gen);
                     auto position = Vector2(0, 0);
                     auto newCreature = creature->reproduce(position);
-                    newCreature->putOnSide(location, *world);
+                    if(newCreature->getType() == "prey"){
+                        newCreature->putOnSide(location, *world);
+                    }
 //                    double parentSpeed = creature->getSpeed();
 //                    double noise = noiseDis(gen);
 //                    newCreature->setSpeed(parentSpeed * (1. + noise)); //Speed mutation
