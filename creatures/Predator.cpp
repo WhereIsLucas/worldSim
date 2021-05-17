@@ -16,9 +16,15 @@ void Predator::searchForFood(World &world) {
         if (creature->getType() == "prey" && !creature->isEaten()) {
             double distance = getDistanceBetweenVectors(this->getPosition(), creature->getPosition());
             if (distance < min_distance && distance < this->getSensingRange()) {
-                min_distance = distance;
-                this->setHasTarget(true);
-                this->setTargetIndex(i); // storing the index of the prey targeted by the predator
+                double dx = creature->getPosition().getX() - this->getX();
+                double dy = creature->getPosition().getY() - this->getY();
+                double targetAngle = atan2(-dx, dy) * (180 / M_PI) + 90;
+                if (targetAngle >= this->getAngle() - this->getFieldOfView() / 2. &&
+                    targetAngle <= this->getAngle() + this->getFieldOfView() / 2.) { //Cone vision
+                    min_distance = distance;
+                    this->setHasTarget(true);
+                    this->setTargetIndex(i); // storing the index of the prey targeted by the predator
+                }
             }
         }
     }

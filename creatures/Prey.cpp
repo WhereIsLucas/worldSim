@@ -90,7 +90,7 @@ void Prey::searchForFood(World &world) {
                 double dx = foodItem.getPosition().getX() - this->getX();
                 double dy = foodItem.getPosition().getY() - this->getY();
                 double targetAngle = atan2(-dx, dy) * (180 / M_PI) + 90;
-                if (targetAngle <= this->getAngle() - this->getFieldOfView() / 2. &&
+                if (targetAngle >= this->getAngle() - this->getFieldOfView() / 2. &&
                     targetAngle <= this->getAngle() + this->getFieldOfView() / 2.) { //Cone vision
                     min_distance = distance;
                     this->setTarget(foodItem);
