@@ -149,7 +149,8 @@ int main() {
              << "," << world->getPredatorsCount()
              << std::endl;
         file.close();
-        if (world->getPredatorsCount() == 0 || world->getPreysCount() == 0) {
+        if ((world->getPredatorsCount() == 0 && parameters->startingPredators > 0) ||
+            (world->getPreysCount() == 0 && parameters->startingPreys > 0)) {
             exit(0);
         }
     }
