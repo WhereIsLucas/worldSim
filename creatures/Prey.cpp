@@ -16,7 +16,6 @@ Prey::Prey(Vector2 &position, SimParameters &parameters) : Creature(position, pa
 void Prey::stepMove(World &world1) {
     std::uniform_real_distribution<> dis(-45., 45.);
     double noise = dis(randomDevice2);
-    this->searchForPredator(world1);
 
     if (!this->hunterIndex.empty()) { // If a predator is close
         double predAngle = 0.;
@@ -28,7 +27,7 @@ void Prey::stepMove(World &world1) {
         this->setAngle((predAngle / (double) this->hunterIndex.size()) + noise / 1.5);
         this->hunterIndex.clear();
     }
-    if (this->isHasTarget() && !this->hunterIndex.empty()) { // Does not eat if a predator is close
+    if (this->isHasTarget() && !this->getIsHunted()) { // Does not eat if a predator is close
         if (fabs(this->getPosition().getX() - this->getTarget().getPosition().getX()) < this->getEatingRange() &&
             fabs(this->getPosition().getY() - this->getTarget().getPosition().getY()) < this->getEatingRange()) {
             world1.getFoodItems()[this->getTarget().getIndex()].setEaten(true);
@@ -65,7 +64,7 @@ void Prey::stepMove(World &world1) {
     Vector2 dVec = Vector2((cos(this->getAngle() * M_PI / 180.) * this->getSpeed()),
                            (sin(this->getAngle() * M_PI / 180.) * this->getSpeed()));
     this->setPosition(this->getPosition() + dVec);
-    this->decrementEnergy(getSpeed() * getSpeed() / 100.);
+    this->decrementEnergy(getSpeed() * getSpeed() / 2.);
 }
 
 void Prey::searchForPredator(World &world) {
@@ -100,6 +99,7 @@ void Prey::searchForFood(World &world) {
             }
         }
     }
+    this->searchForPredator(world);
 }
 
 void Prey::refreshTarget(World &world1) {

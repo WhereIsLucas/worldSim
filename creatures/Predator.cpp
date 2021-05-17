@@ -71,7 +71,7 @@ void Predator::stepMove(World &world1) {
         if (fabs(this->getX() - world1.getCreature(i)->getX()) < this->getEatingRange() &&
             fabs(this->getY() - world1.getCreature(i)->getY()) < this->getEatingRange()) {
             this->setCollectPrey(this->getCollectPrey()+1); // One prey is caught by the predator
-            this->setCollectedFood(this->getCollectedFood() + 5.);
+            this->setCollectedFood(this->getCollectedFood() + 20.);
             this->clearTarget();
             world1.setCreatureAsEaten(i); // the prey is eaten and so removed
         } else {
@@ -105,7 +105,7 @@ void Predator::stepMove(World &world1) {
     Vector2 dVec = Vector2((cos(this->getAngle() * M_PI / 180.) * this->getSpeed()),
                            (sin(this->getAngle() * M_PI / 180.) * this->getSpeed()));
     this->setPosition(this->getPosition() + dVec);
-    this->decrementEnergy(getSpeed() * getSpeed() / 300.);
+    this->decrementEnergy(getSpeed() * getSpeed() / 2.);
 }
 
 Predator::Predator(Vector2 &position, SimParameters &parameters) : Creature(position, parameters) {
