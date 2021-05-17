@@ -13,7 +13,7 @@ class Prey : public Creature {
 private:
 
     std::vector<int> hunterIndex;
-    double predatorSensingRange = 10.;
+    double predatorSensingRange = parameters->predatorSensingRange;
 
 public:
     Prey(Vector2 &position, SimParameters &parameters);

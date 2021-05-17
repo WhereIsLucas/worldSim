@@ -21,11 +21,12 @@ SimParameters::SimParameters(const std::string &parameters_location) {
         this->preySpeed = data["prey"]["baseSpeed"];
         this->preyFieldOfView = data["prey"]["baseFieldOfView"];
         this->preyReproductionThreshold = data["prey"]["baseReproductionThreshold"];
+        this->predatorSensingRange = data["prey"]["predatorSensingRange"];
         this->predatorEatingRange = data["predator"]["baseEatingRange"];
-        this->predatorSensingRange = data["predator"]["baseSensingRange"];
         this->predatorSpeed = data["predator"]["baseSpeed"];
         this->predatorFieldOfView = data["predator"]["baseFieldOfView"];
         this->predatorReproductionThreshold = data["predator"]["baseReproductionThreshold"];
+        this->energyThreshold = data["predator"]["energyThreshold"];
 
     } else {
         std::cout << "File error" << std::endl;

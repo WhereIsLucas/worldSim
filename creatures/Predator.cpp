@@ -64,7 +64,7 @@ void Predator::setCollectPrey(int collectedPrey) {
 
 void Predator::stepMove(World &world1) {
     std::uniform_real_distribution<> dis(-45., 45.);
-    double energyThreshold = 5.;
+    double energyThreshold = this->parameters->energyThreshold;
     double noise = dis(randomDevice1);
     if (this->isHasTarget() && this->getEnergy() <= energyThreshold) {
         int i = this->target_index;

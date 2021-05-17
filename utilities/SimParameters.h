@@ -31,6 +31,7 @@ public:
     double predatorSpeed;
     double predatorFieldOfView;
     double predatorReproductionThreshold;
+    double energyThreshold;
 
     SimParameters(const std::string &parameters_location);
 };
