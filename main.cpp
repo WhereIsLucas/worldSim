@@ -77,6 +77,10 @@ int main() {
             if(creature->getType() == "prey"){
                 creature->putOnSide(location, *world);
             }
+            if (creature->getType() == "predator"){
+                auto position = Vector2(0, 0);
+                creature->setPosition(position);
+            }
         }
         for (int j = 0; j < stepPerDay; ++j) { //Day loop
             for (int k = 0; k < world->getCreaturesCount(); ++k) {
