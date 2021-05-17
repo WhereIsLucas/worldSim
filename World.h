@@ -44,12 +44,18 @@ public:
     unsigned long getPredatorsCount();
 
     void setCreatureAsEaten(int index);
-
+    unsigned long getNewCreaturesCount();
+    void addNewCreature(Creature &creature);
+    void clearNewCreature();
+    void appendVec();
 private:
     double x;
     double y;
     std::vector<Creature*> creatures;
+    std::vector<Creature*> newCreatures;
     std::vector<FoodPlant> foodItems;
+
+
 
 };
 

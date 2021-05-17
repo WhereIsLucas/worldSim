@@ -48,19 +48,20 @@ int main() {
     remove(fileName.c_str());
 
     std::uniform_int_distribution<> dis(0, 3);
+    std::uniform_real_distribution<> positionDistribution(-0.5, 0.5);
     //We start the world and place creatures on the sides
     for (int i = 0; i < startingPreys; ++i) {
         auto position = Vector2(0, 0);
         auto newCreature = new Prey(position, *parameters);
-        int location = dis(gen);
-        newCreature->putOnSide(location, *world);
+//        int location = dis(gen);
+//        newCreature->putOnSide(location, *world);
         world->addCreature(*newCreature);
     }
     for (int i = 0; i < (startingPredators); ++i) {
-        int location = dis(gen);
+//        int location = dis(gen);
         auto position = Vector2(0, 0);
         auto newCreature = new Predator(position, *parameters);
-        newCreature->putOnSide(location, *world);
+//        newCreature->putOnSide(location, *world);
         world->addCreature(*newCreature);
     }
     //Days loop
@@ -70,13 +71,16 @@ int main() {
         for (int i = 0; i < world->getCreaturesCount(); ++i) { //Morning loop
             auto creature = world->getCreature(i);
             creature->setCollectedFood(0.);
-            creature->setEnergy(0.);
+            creature->setEnergy(50.);
             creature->clearTarget();
             creature->setIsHunted(false);
-            if(creature->getType() == "prey"){
-                int location = dis(gen);
-                creature->putOnSide(location, *world);
-            }
+            auto position = Vector2(positionDistribution(gen) * parameters->worldWidthX,
+                                    positionDistribution(gen) * parameters->worldWidthY);
+            creature->setPosition(position);
+//            if(creature->getType() == "prey"){
+//                int location = dis(gen);
+//                creature->putOnSide(location, *world);
+//            }
 //            if (creature->getType() == "predator"){
 //                auto position = Vector2(0, 0);
 //                creature->setPosition(position);
@@ -98,10 +102,12 @@ int main() {
                     } else {
                         preysPrinter->print(creature, day * stepPerDay + j, "prey", false);
                     }
+
                 }
             }
             foodPrinter->print(world, day * stepPerDay + j);
         }
+
         for (int i = 0; i < world->getCreaturesCount(); ++i) {
             auto creature = world->getCreature(i);
             if (creature->isEaten()) {
@@ -126,21 +132,21 @@ int main() {
             energyTotal += energyBalance;
             if (energyBalance > 0.) {
                 if (energyBalance > creature->reproductionThreshold) {
-                    int location = dis(gen);
+//                    int location = dis(gen);
                     auto position = Vector2(0, 0);
                     auto newCreature = creature->reproduce(position);
-                    if(newCreature->getType() == "prey"){
-                        newCreature->putOnSide(location, *world);
-                    }
 //                    double parentSpeed = creature->getSpeed();
 //                    double noise = noiseDis(gen);
 //                    newCreature->setSpeed(parentSpeed * (1. + noise)); //Speed mutation
-                    world->addCreature(*newCreature);
+                    world->addNewCreature(*newCreature); // Vector of world with the new creatures
                 }
             } else {
                 world->removeCreature(i); // The creature dies if energyBalance < 0
             }
         }
+        world->appendVec(); // We append the vector &creatures with the vector &newCreatures
+        world->clearNewCreature();
+
         std::cout << "Day " << day << " - preys : " << world->getPreysCount() << " - predator : "
                   << world->getPredatorsCount() << std::endl;
 //        std::cout << "Day " << day << " - creatures : " << world->getCreaturesCount() << std::endl;

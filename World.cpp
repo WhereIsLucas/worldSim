@@ -17,7 +17,20 @@ void World::addCreature(Creature &creature) {
     World::creatures.push_back(&creature);
 }
 
+void World::addNewCreature(Creature &creature){
+    World::newCreatures.push_back(&creature);
+}
 
+void World::clearNewCreature(){
+    World::newCreatures.clear();
+}
+unsigned long World::getNewCreaturesCount() {
+    return World::newCreatures.size();
+}
+
+void World::appendVec(){
+    World::creatures.insert(creatures.end(), newCreatures.begin(), newCreatures.end());
+}
 unsigned long World::getCreaturesCount() {
     return World::creatures.size();
 }
@@ -79,7 +92,6 @@ std::vector<FoodPlant> &World::getFoodItems() {
 }
 
 void World::removeCreature(int index) {
-    auto creature = World::getCreature(index);
     World::creatures.erase(World::creatures.begin() + index);
 }
 
