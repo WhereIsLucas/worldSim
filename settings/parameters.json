@@ -17,7 +17,7 @@
   "predator": {
     "baseEatingRange": 1.0,
     "baseSensingRange": 18.0,
-    "baseSpeed": 1.40,
+    "baseSpeed": 1.35,
     "baseFieldOfView": 180.0,
     "baseReproductionThreshold": 3.5,
     "energyThreshold": 4.8

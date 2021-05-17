@@ -74,9 +74,9 @@ int main() {
             creature->clearTarget();
             creature->setIsHunted(false);
             int location = dis(gen);
-            if(creature->getType() == "prey"){
-                creature->putOnSide(location, *world);
-            }
+//            if(creature->getType() == "prey"){
+//                creature->putOnSide(location, *world);
+//            }
 //            if (creature->getType() == "predator"){
 //                auto position = Vector2(0, 0);
 //                creature->setPosition(position);
