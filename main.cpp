@@ -27,7 +27,7 @@ int main() {
     std::ofstream file;
     file.open(fileName.c_str(), std::ios::app);
     file.precision(10);
-    file << parameters->worldWidthX << "," << parameters->worldWidthY << std::endl;
+    file << parameters->worldWidthX << "," << parameters->worldWidthY << "," << stepPerDay << std::endl;
     file.close();
 
     //Maybe we should work with food density
@@ -48,18 +48,19 @@ int main() {
     remove(fileName.c_str());
 
     std::uniform_int_distribution<> dis(0, 3);
-    std::uniform_real_distribution<> positionDistribution(-0.5, 0.5);
     //We start the world and place creatures on the sides
     for (int i = 0; i < startingPreys; ++i) {
-        auto position = Vector2(positionDistribution(gen) * parameters->worldWidthX,
-                                positionDistribution(gen) * parameters->worldWidthY);
+        auto position = Vector2(0, 0);
         auto newCreature = new Prey(position, *parameters);
+        int location = dis(gen);
+        newCreature->putOnSide(location, *world);
         world->addCreature(*newCreature);
     }
     for (int i = 0; i < (startingPredators); ++i) {
-        auto position = Vector2(positionDistribution(gen) * parameters->worldWidthX,
-                                positionDistribution(gen) * parameters->worldWidthY);
+        int location = dis(gen);
+        auto position = Vector2(0, 0);
         auto newCreature = new Predator(position, *parameters);
+        newCreature->putOnSide(location, *world);
         world->addCreature(*newCreature);
     }
     //Days loop
@@ -72,10 +73,10 @@ int main() {
             creature->setEnergy(0.);
             creature->clearTarget();
             creature->setIsHunted(false);
-            int location = dis(gen);
-//            if(creature->getType() == "prey"){
-//                creature->putOnSide(location, *world);
-//            }
+            if(creature->getType() == "prey"){
+                int location = dis(gen);
+                creature->putOnSide(location, *world);
+            }
 //            if (creature->getType() == "predator"){
 //                auto position = Vector2(0, 0);
 //                creature->setPosition(position);
@@ -87,8 +88,7 @@ int main() {
                 if (!creature->isEaten()) {
                     if (creature->isHasTarget()) {
                         creature->refreshTarget(*world);
-                    }
-                    if (!creature->isHasTarget()) {
+                    }else {
                         creature->searchForFood(*world);
                     }
                     creature->stepMove(*world);
@@ -126,9 +126,12 @@ int main() {
             energyTotal += energyBalance;
             if (energyBalance > 0.) {
                 if (energyBalance > creature->reproductionThreshold) {
-                    auto position = Vector2(positionDistribution(gen) * parameters->worldWidthX,
-                                            positionDistribution(gen) * parameters->worldWidthY);
+                    int location = dis(gen);
+                    auto position = Vector2(0, 0);
                     auto newCreature = creature->reproduce(position);
+                    if(newCreature->getType() == "prey"){
+                        newCreature->putOnSide(location, *world);
+                    }
 //                    double parentSpeed = creature->getSpeed();
 //                    double noise = noiseDis(gen);
 //                    newCreature->setSpeed(parentSpeed * (1. + noise)); //Speed mutation

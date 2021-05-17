@@ -6,8 +6,9 @@ import numpy as np
 
 # from plyer import notification
 
+
 types = ['float', 'float']
-domainTypes = ['float', 'float']
+domainTypes = ['float', 'float', 'int']
 preysData = []
 predatorsData = []
 foodData = []
@@ -15,6 +16,14 @@ foodData = []
 # Set up the codec for the video file
 Writer = animation.writers['ffmpeg']
 writer = Writer(fps=25, metadata=dict(artist='Lucas H'), bitrate=1800)
+# import the world parameters
+world = np.genfromtxt('./cmake-build-debug/results/world.txt',
+                      delimiter=',',
+                      dtype=domainTypes,
+                      names=['x', 'y', 'stepPerDay'])
+
+start = 2 * world['stepPerDay']
+end = 4 * world['stepPerDay']
 
 fig = plt.figure(figsize=(7, 7))
 
@@ -22,9 +31,12 @@ fig = plt.figure(figsize=(7, 7))
 path1 = "./cmake-build-debug/results/preys/"
 path2 = "./cmake-build-debug/results/predators/"
 num_files = len([f for f in os.listdir(path1) if os.path.isfile(os.path.join(path1, f))])
-totalFrames = min(num_files - 1, 1500)
+
+totalFrames = end - start
 print(totalFrames)
-for i in range(0, totalFrames):
+
+totalFrames = end - start
+for i in range(start, end):
     fileName = path1 + "prey" + str(i) + ".txt"
     if os.path.exists(fileName):
         preysData.insert(i, np.genfromtxt(fileName,
@@ -49,7 +61,7 @@ predatorsScatGraph = plt.scatter(predatorsData[showingFrame]["x"], predatorsData
 # blue is food
 
 path2 = "./cmake-build-debug/results/food/"
-for i in range(0, totalFrames):
+for i in range(start, end):
     fileName = path2 + "food" + str(i) + ".txt"
     foodData.insert(i, np.genfromtxt(fileName,
                                      delimiter=',',
@@ -63,12 +75,6 @@ plt.title('World Simulation')
 plt.legend()
 # plt.gca().set_aspect('equal', adjustable='box')
 plt.axis("equal")
-
-# import the world parameters
-world = np.genfromtxt('./cmake-build-debug/results/world.txt',
-                      delimiter=',',
-                      dtype=types,
-                      names=['x', 'y'])
 
 plt.xlim(-world['x'] * 0.55, world['x'] * 0.55)
 plt.ylim(-world['y'] * 0.55, world['y'] * 0.55)
