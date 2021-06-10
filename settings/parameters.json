@@ -1,25 +1,25 @@
 {
-  "worldWidthX": 200,
-  "worldWidthY": 200,
-  "maxDays": 250,
-  "startingPreys": 75,
-  "startingPredators": 8,
+  "worldWidthX": 100,
+  "worldWidthY": 100,
+  "maxDays": 75,
+  "startingPreys": 15,
+  "startingPredators": 1,
   "stepPerDay": 100,
-  "foodDensity": 0.0375,
+  "foodDensity": 0.00975,
   "prey": {
-    "baseEatingRange": 1.0,
-    "baseSensingRange": 15.0,
-    "baseSpeed": 1.0,
-    "baseFieldOfView": 360.0,
-    "baseReproductionThreshold": 1.5,
+    "baseEatingRange": 0.5,
+    "baseSensingRange": 15,
+    "baseSpeed": 1,
+    "baseFieldOfView": 360,
+    "baseReproductionThreshold": 5.0,
     "predatorSensingRange": 10.0
   },
   "predator": {
-    "baseEatingRange": 1.0,
-    "baseSensingRange": 18.0,
-    "baseSpeed": 1.35,
-    "baseFieldOfView": 180.0,
-    "baseReproductionThreshold": 3.5,
-    "energyThreshold": 4.8
+    "baseEatingRange": 1,
+    "baseSensingRange": 15,
+    "baseSpeed": 1.2,
+    "baseFieldOfView": 180,
+    "baseReproductionThreshold": 20.0,
+    "energyThreshold": 80
   }
 }
