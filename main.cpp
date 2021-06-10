@@ -144,6 +144,7 @@ int main() {
                 world->removeCreature(i); // The creature dies if energyBalance < 0
             }
         }
+
         world->appendVec(); // We append the vector &creatures with the vector &newCreatures
         world->clearNewCreature();
 

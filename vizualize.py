@@ -22,8 +22,8 @@ world = np.genfromtxt('./cmake-build-debug/results/world.txt',
                       dtype=domainTypes,
                       names=['x', 'y', 'stepPerDay'])
 
-start = 2 * world['stepPerDay']
-end = 4 * world['stepPerDay']
+start = 0 * world['stepPerDay']
+end = 3 * world['stepPerDay']
 
 fig = plt.figure(figsize=(7, 7))
 

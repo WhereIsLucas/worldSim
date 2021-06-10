@@ -57,6 +57,42 @@ plt.title("energy_graph")
 plt.legend()
 plt.savefig('exports/energy_graph.png')
 #
+plt.clf()
+
+
+plt.plot(creaturesData['preys'], creaturesData['predators'], "r-")
+plt.ylim(bottom=0)
+plt.title("population evolution")
+plt.legend()
+plt.savefig('exports/population_cycles.png')
+
+
+
+'''oscillation = [[]]
+for i in range(5):
+    prey_mean = 0
+    predator_mean = 0
+    path = "./cmake-build-debug/results/creatureCount"+str(i)+".txt"
+    creaturesData = np.genfromtxt(path,
+                                  delimiter=',',
+                                  dtype=types,
+                                  names=['x', 'y', 'energy', 'meanSpeed', 'preys', "'predators'"])
+    for j in range(creaturesData.shape[0]):
+        prey_mean += creaturesData['preys'].iloc[j]
+        predator_mean += creaturesData['predators'].iloc[j]
+    
+    prey_mean /= creaturesData.shape[0] # mean number of preys throughout the simulation
+    predator_mean /= creaturesData.shape[0]
+    
+    oscillation.append([prey_mean,predator_mean])
+
+abscissa = np.arange(5)
+oscillationT = np.transpose(oscillation)
+plt.scatter(abscissa, oscillationT[0])
+plt.scatter(abscissa, oscillationT[1])
+plt.legend(["Preys", "Predators"])
+plt.ylim(bottom=0)
+plt.show()'''
 
 title = 'worldSim'
 message = 'Graphs are ready'
