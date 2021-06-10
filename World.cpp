@@ -69,7 +69,7 @@ double World::getY() const {
     return y;
 }
 
-void World::prepareFood(int foodQuantity) {
+void World::prepareFood(int foodQuantity, SimParameters &simParameters) {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
     std::uniform_real_distribution<> dis(-.5, .5);
@@ -79,6 +79,7 @@ void World::prepareFood(int foodQuantity) {
                                 this->getY() * dis(gen));
         auto foodItem = new FoodPlant(position);
         foodItem->setIndex(i);
+        foodItem->setFoodQuantity(simParameters.preyEatingSupply);
         World::addFoodItem(*foodItem, i);
     }
 }

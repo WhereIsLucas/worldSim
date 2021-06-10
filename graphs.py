@@ -39,28 +39,36 @@ foodDensityEvolutionData = np.genfromtxt(path,
                                          dtype=[float, float],
                                          names=['x', 'y'])
 
-# days = min(creaturesData.size,20)
 days = creaturesData.size
+# days = min(creaturesData.size, 30)
 creaturesData = np.resize(creaturesData, days)
 
 # meanData = np.delete(creaturesData, range(0, 50))
-mean = np.mean(cre["preys"])
-print(mean)
+# mean = np.mean(meanData["preys"])
+# print(mean)
 
 showingFrame = 0
 
-speedScatGraph = plt.plot(creaturesData['x'], creaturesData['meanSpeed'], label='Creature meanSpeed')
+speedScatGraph = plt.plot(creaturesData['x'], creaturesData['meanSpeed'])
+# plt.ylim(bottom=0)
+plt.title("Mean Speed Evolution")
+plt.xlabel('Days')
+plt.ylabel('Mean Speed')
 plt.ylim(bottom=0)
-plt.title("mean speed evolution")
-plt.legend()
+plt.xlim(left=0)
 plt.savefig('exports/speed_graph.png')
 
 plt.clf()
 
 plt.stackplot(creaturesData['x'], creaturesData['predators'], creaturesData['preys'])
 plt.ylim(bottom=0)
-plt.title("population evolution")
+plt.xlim(left=0)
+
+plt.title("Population Evolution")
+plt.xlabel('Days')
+plt.ylabel('Population')
 plt.legend()
+
 plt.savefig('exports/population_graph.png')
 #
 # plt.clf()

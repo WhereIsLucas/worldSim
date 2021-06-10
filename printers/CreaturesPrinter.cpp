@@ -12,7 +12,12 @@ void CreaturesPrinter::print(Creature *creature, int frameNumber, const std::str
         file << " , , " << std::endl;
         file.close();
     }else {
-        file << creature->getX() << "," << creature->getY() << "," << creature->getEnergy() + creature->getCollectedFood() << std::endl;
+        file
+        << creature->getX() << ","
+        << creature->getY() << ","
+        << creature->getEnergy() + creature->getCollectedFood() << ","
+        << creature->getSpeed()
+        << std::endl;
         file.close();
     }
 

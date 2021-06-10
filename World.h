@@ -10,6 +10,7 @@ class Creature;
 #include <vector>
 #include "creatures/Creature.h"
 #include "food/FoodPlant.h"
+#include "utilities/SimParameters.h"
 
 class World {
 public:
@@ -24,7 +25,7 @@ public:
 
     Creature *getCreature(int index);
 
-    void prepareFood(int foodQuantity);
+    void prepareFood(int foodQuantity, SimParameters &simParameters);
 
     double getX() const;
 

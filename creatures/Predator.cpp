@@ -66,12 +66,12 @@ void Predator::stepMove(World &world1) {
     std::uniform_real_distribution<> dis(-45., 45.);
     double energyThreshold = this->parameters->energyThreshold;
     double noise = dis(randomDevice1);
-    if (this->isHasTarget() && this->getEnergy() <= energyThreshold) {
+    if (this->isHasTarget() && (this->getEnergy() + this->getCollectedFood())  <= energyThreshold) {
         int i = this->target_index;
         if (fabs(this->getX() - world1.getCreature(i)->getX()) < this->getEatingRange() &&
             fabs(this->getY() - world1.getCreature(i)->getY()) < this->getEatingRange()) {
             this->setCollectPrey(this->getCollectPrey()+1); // One prey is caught by the predator
-            this->setCollectedFood(this->getCollectedFood() + 20.);
+            this->setCollectedFood(this->getCollectedFood() + this->parameters->predatorEatingSupply);
             this->clearTarget();
             world1.setCreatureAsEaten(i); // the prey is eaten and so removed
         } else {

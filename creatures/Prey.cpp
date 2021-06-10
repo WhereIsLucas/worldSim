@@ -64,7 +64,7 @@ void Prey::stepMove(World &world1) {
     Vector2 dVec = Vector2((cos(this->getAngle() * M_PI / 180.) * this->getSpeed()),
                            (sin(this->getAngle() * M_PI / 180.) * this->getSpeed()));
     this->setPosition(this->getPosition() + dVec);
-    this->decrementEnergy(getSpeed() * getSpeed() / 2.);
+    this->decrementEnergy(getSpeed() * getSpeed() / 30.);
 }
 
 void Prey::searchForPredator(World &world) {

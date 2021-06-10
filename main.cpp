@@ -14,6 +14,7 @@ int main() {
     std::random_device rd;
     std::mt19937 gen(rd());
     auto parameters = new SimParameters("settings");
+    std::uniform_real_distribution<> noiseDis(-0.01, 0.01);
 
 
     int maxDays = parameters->maxDays;
@@ -41,9 +42,9 @@ int main() {
     auto preysPrinter = new CreaturesPrinter("results/preys/");
     auto predatorsPrinter = new CreaturesPrinter("results/predators/");
     auto foodPrinter = new FoodPrinter("results/food/");
-    preysPrinter->clearPrints(25000, "prey");
-    predatorsPrinter->clearPrints(25000, "predator");
-    foodPrinter->clearPrints(25000);
+    preysPrinter->clearPrints(30000, "prey");
+    predatorsPrinter->clearPrints(30000, "predator");
+    foodPrinter->clearPrints(30000);
     fileName = "results/creatureCount.txt";
     remove(fileName.c_str());
 
@@ -55,6 +56,8 @@ int main() {
         auto newCreature = new Prey(position, *parameters);
 //        int location = dis(gen);
 //        newCreature->putOnSide(location, *world);
+        double noise = noiseDis(gen);
+        newCreature->setSpeed(1 + noise);
         world->addCreature(*newCreature);
     }
     for (int i = 0; i < (startingPredators); ++i) {
@@ -67,11 +70,11 @@ int main() {
     //Days loop
     for (int day = 0; day < maxDays; ++day) {
         world->clearFood();
-        world->prepareFood(foodPerDay);
+        world->prepareFood(foodPerDay, *parameters);
         for (int i = 0; i < world->getCreaturesCount(); ++i) { //Morning loop
             auto creature = world->getCreature(i);
             creature->setCollectedFood(0.);
-            creature->setEnergy(50.);
+            creature->setEnergy(0.);
             creature->clearTarget();
             creature->setIsHunted(false);
             auto position = Vector2(positionDistribution(gen) * parameters->worldWidthX,
@@ -92,7 +95,7 @@ int main() {
                 if (!creature->isEaten()) {
                     if (creature->isHasTarget()) {
                         creature->refreshTarget(*world);
-                    }else {
+                    } else {
                         creature->searchForFood(*world);
                     }
                     creature->stepMove(*world);
@@ -116,6 +119,8 @@ int main() {
         }
 
         double meanSpeed = 0.;
+        double meanDeadSpeed = 0.;
+        int deadCount = 0;
         unsigned long count = world->getCreaturesCount(); //We take it now before adding other creatures;
         for (int i = 0; i < world->getCreaturesCount(); ++i) { //Speed mean loop
             auto creature = world->getCreature(i);
@@ -125,7 +130,6 @@ int main() {
 
         double energyTotal = 0.;
         // This is the noise used for genetic mutations
-        std::uniform_real_distribution<> noiseDis(-0.05, 0.05);
         for (int i = 0; i < world->getCreaturesCount(); ++i) { //Night loop
             auto creature = world->getCreature(i);
             double energyBalance = creature->getEnergy() + creature->getCollectedFood();
@@ -135,19 +139,26 @@ int main() {
 //                    int location = dis(gen);
                     auto position = Vector2(0, 0);
                     auto newCreature = creature->reproduce(position);
-//                    double parentSpeed = creature->getSpeed();
-//                    double noise = noiseDis(gen);
-//                    newCreature->setSpeed(parentSpeed * (1. + noise)); //Speed mutation
+                    double parentSpeed = creature->getSpeed();
+                    double noise = noiseDis(gen);
+                    newCreature->setSpeed(parentSpeed + noise); //Speed mutation
                     world->addNewCreature(*newCreature); // Vector of world with the new creatures
                 }
             } else {
+                deadCount++;
+                meanDeadSpeed += creature->getSpeed();
                 world->removeCreature(i); // The creature dies if energyBalance < 0
             }
         }
+        meanDeadSpeed = meanDeadSpeed / (double) deadCount;
         world->appendVec(); // We append the vector &creatures with the vector &newCreatures
         world->clearNewCreature();
 
-        std::cout << "Day " << day << " - preys : " << world->getPreysCount() << " - predator : "
+        std::cout << "Day " << day <<
+                  " - preys : " << world->getPreysCount() <<
+                  " - speed : " << meanSpeed <<
+                  " - dead speed : " << (meanDeadSpeed < meanSpeed) <<
+                  " - predator : "
                   << world->getPredatorsCount() << std::endl;
 //        std::cout << "Day " << day << " - creatures : " << world->getCreaturesCount() << std::endl;
         fileName = "results/creatureCount.txt";

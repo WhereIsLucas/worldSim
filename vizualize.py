@@ -22,8 +22,8 @@ world = np.genfromtxt('./cmake-build-debug/results/world.txt',
                       dtype=domainTypes,
                       names=['x', 'y', 'stepPerDay'])
 
-start = 2 * world['stepPerDay']
-end = 4 * world['stepPerDay']
+start = 0 * world['stepPerDay']
+end = 2 * world['stepPerDay']
 
 fig = plt.figure(figsize=(7, 7))
 
@@ -54,11 +54,11 @@ for i in range(start, end):
 showingFrame = 0
 preysScatGraph = plt.scatter(preysData[showingFrame]["x"], preysData[showingFrame]['y'], alpha=0.5, s=20,
                              c='red', label='prey')
-# predatorsScatGraph = plt.scatter(predatorsData[showingFrame]["x"], predatorsData[showingFrame]['y'], alpha=0.5, s=20,
-#                                  c='green', label='predator')
-# red are preys
-# green are predators
-# blue is food
+predatorsScatGraph = plt.scatter(predatorsData[showingFrame]["x"], predatorsData[showingFrame]['y'], alpha=0.5, s=20,
+                                 c='green', label='predator')
+# preys are red
+# predators are green
+# food is blue
 
 path2 = "./cmake-build-debug/results/food/"
 for i in range(start, end):
@@ -84,7 +84,7 @@ plt.savefig('exports/test.png')
 
 def update(frame_number):
     preysScatGraph.set_offsets(np.c_[preysData[frame_number]["x"], preysData[frame_number]["y"]])
-    # predatorsScatGraph.set_offsets(np.c_[predatorsData[frame_number]["x"], predatorsData[frame_number]["y"]])
+    predatorsScatGraph.set_offsets(np.c_[predatorsData[frame_number]["x"], predatorsData[frame_number]["y"]])
     foodScatGraph.set_offsets(np.c_[foodData[frame_number]["x"], foodData[frame_number]["y"]])
 
 
