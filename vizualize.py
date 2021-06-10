@@ -54,8 +54,8 @@ for i in range(start, end):
 showingFrame = 0
 preysScatGraph = plt.scatter(preysData[showingFrame]["x"], preysData[showingFrame]['y'], alpha=0.5, s=20,
                              c='red', label='prey')
-predatorsScatGraph = plt.scatter(predatorsData[showingFrame]["x"], predatorsData[showingFrame]['y'], alpha=0.5, s=20,
-                                 c='green', label='predator')
+# predatorsScatGraph = plt.scatter(predatorsData[showingFrame]["x"], predatorsData[showingFrame]['y'], alpha=0.5, s=20,
+#                                  c='green', label='predator')
 # red are preys
 # green are predators
 # blue is food
@@ -84,7 +84,7 @@ plt.savefig('exports/test.png')
 
 def update(frame_number):
     preysScatGraph.set_offsets(np.c_[preysData[frame_number]["x"], preysData[frame_number]["y"]])
-    predatorsScatGraph.set_offsets(np.c_[predatorsData[frame_number]["x"], predatorsData[frame_number]["y"]])
+    # predatorsScatGraph.set_offsets(np.c_[predatorsData[frame_number]["x"], predatorsData[frame_number]["y"]])
     foodScatGraph.set_offsets(np.c_[foodData[frame_number]["x"], foodData[frame_number]["y"]])
 
 

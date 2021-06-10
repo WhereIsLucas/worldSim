@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 
+from plyer import notification
 
-# from plyer import notification
 
 def plotting_fig(x, y, label):
     creatureScatGraph = plt.plot(x, y, label=label)
@@ -21,7 +21,6 @@ def plotting_fig(x, y, label):
 
 types = ['float', 'float', 'float', 'float', 'float', 'float']
 domainTypes = ['float', 'float']
-creaturesData = []
 foodData = []
 
 fig = plt.figure(figsize=(7, 7))
@@ -32,6 +31,21 @@ creaturesData = np.genfromtxt(path,
                               delimiter=',',
                               dtype=types,
                               names=['x', 'y', 'energy', 'meanSpeed', 'preys', "'predators'"])
+# days = min(creaturesData.size,20)
+
+path = "./cmake-build-debug/results/foodDensity.txt"
+foodDensityEvolutionData = np.genfromtxt(path,
+                                         delimiter=',',
+                                         dtype=[float, float],
+                                         names=['x', 'y'])
+
+# days = min(creaturesData.size,20)
+days = creaturesData.size
+creaturesData = np.resize(creaturesData, days)
+
+# meanData = np.delete(creaturesData, range(0, 50))
+mean = np.mean(cre["preys"])
+print(mean)
 
 showingFrame = 0
 
@@ -51,18 +65,28 @@ plt.savefig('exports/population_graph.png')
 #
 # plt.clf()
 #
-energyScatGraph = plt.plot(creaturesData['x'], creaturesData['energy'] / creaturesData['y'], label='Creature energy')
-plt.ylim(bottom=0)
-plt.title("energy_graph")
-plt.legend()
-plt.savefig('exports/energy_graph.png')
+# energyScatGraph = plt.plot(creaturesData['x'], creaturesData['energy'] / creaturesData['y'], label='Creature energy')
+# plt.ylim(bottom=0)
+# plt.title("energy_graph")
+# plt.legend()
+# plt.savefig('exports/energy_graph.png')
 #
+
+plt.clf()
+
+plt.scatter(foodDensityEvolutionData['x'], foodDensityEvolutionData['y'])
+plt.ylim(bottom=0)
+plt.xlim(left=0)
+plt.title("foodDensity vs saturation")
+plt.xlabel('Food Density')
+plt.ylabel('Mean population saturation')
+plt.savefig('exports/saturation_density.png')
 
 title = 'worldSim'
 message = 'Graphs are ready'
 
-# notification.notify(title=title,
-#                    message=message,
-#                    app_icon=None,
-#                    timeout=10,
-#                    toast=False)
+notification.notify(title=title,
+                    message=message,
+                    app_icon=None,
+                    timeout=10,
+                    toast=False)
