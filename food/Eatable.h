@@ -10,7 +10,7 @@
 
 class Eatable {
 private:
-    double foodQuantity = 3.;
+    double foodQuantity = 10.;
     int index = -1;
     bool eaten = false;
 public:
